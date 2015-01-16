@@ -10,3 +10,7 @@ set relativenumber
 set ruler
 set spellfile=~/.vim/spell/en.utf-8.add
 set switchbuf=useopen
+
+if &t_Co == 256
+ colorscheme Tomorrow-Night-Bright
+endif
