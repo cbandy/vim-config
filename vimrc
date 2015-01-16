@@ -32,3 +32,45 @@ endif
 
 let mapleader = ","
 nmap <Leader>nt :NERDTreeToggle<CR>
+nmap <Leader>r :call RunTestFile(expand('%:.'))<CR>
+nmap <Leader>R :call RunTestFile(expand('%:.'), line('.'))<CR>
+
+function! s:RunInSplitWindow(type, cmd)
+ let winnr = bufwinnr('^' . a:type . '$')
+ silent! execute winnr < 0 ? 'botright new ' . a:type : winnr . 'wincmd w'
+ setlocal bufhidden=wipe buftype=nofile modifiable nobuflisted noswapfile nowrap
+ silent! execute 'setlocal filetype=' . a:type
+ silent! execute 'silent %!' . join(map(split(a:cmd), 'expand(v:val)'))
+ silent! execute 'resize ' . line('$')
+ silent! execute 'nnoremap <silent> <buffer> q :q!<CR>'
+ setlocal nomodifiable
+endfunction
+
+function! RunTestFile(file, ...)
+ let file = a:file
+ let line = a:0 > 0 ? a:1 : 0
+
+ if match(file, '[.]feature$') != -1
+  call s:RunInSplitWindow('',
+   \ 'cucumber ' . (line > 0 ? file . ':' . line : file))
+
+ elseif match(file, '[.]go$') != -1
+  call s:RunInSplitWindow('',
+   \ 'go test '
+   \ . (file == expand('%:.') ? expand('%:.:h:s#^[.]\@!#./#') : file)
+   \ . (line > 0 ? ' -v -run "^' . matchstr(getline(search('^func Test', 'bcnW')), 'Test[a-zA-Z0-9_]*') . '$"' : ''))
+
+ elseif match(file, '[Tt]est[.]php$') != -1
+  call s:RunInSplitWindow('',
+   \ 'phpunit ' . file)
+
+ elseif match(file, '[Ss]pec[.]rb$') != -1
+  call s:RunInSplitWindow('rspec-result',
+   \ 'rspec ' . (line > 0 ? file . ':' . line : file))
+
+ elseif match(file, '[.]sql$') != -1
+  call s:RunInSplitWindow('',
+   \ 'psql -Atqf ' . file)
+
+ endif
+endfunction
