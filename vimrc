@@ -56,7 +56,7 @@ function! RunTestFile(file, ...)
    \ 'cucumber ' . (line > 0 ? file . ':' . line : file))
 
  elseif match(file, '[.]go$') != -1
-  call s:RunInSplitWindow('',
+  call s:RunInSplitWindow('go-test-result',
    \ 'go test '
    \ . (file == expand('%:.') ? expand('%:.:h:s#^[.]\@!#./#') : file)
    \ . (line > 0 ? ' -v -run "^' . matchstr(getline(search('^func Test', 'bcnW')), 'Test[a-zA-Z0-9_]*') . '$"' : ''))
