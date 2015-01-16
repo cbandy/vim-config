@@ -41,6 +41,7 @@ function! s:RunInSplitWindow(type, cmd)
  setlocal bufhidden=wipe buftype=nofile modifiable nobuflisted noswapfile nowrap
  silent! execute 'setlocal filetype=' . a:type
  silent! execute 'silent %!' . join(map(split(a:cmd), 'expand(v:val)'))
+ silent! execute '%substitute/^.*\r//e | :1'
  silent! execute 'resize ' . line('$')
  silent! execute 'nnoremap <silent> <buffer> q :q!<CR>'
  setlocal nomodifiable
