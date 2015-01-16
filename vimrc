@@ -14,3 +14,6 @@ set switchbuf=useopen
 if &t_Co == 256
  colorscheme Tomorrow-Night-Bright
 endif
+
+let mapleader = ","
+nmap <Leader>nt :NERDTreeToggle<CR>
