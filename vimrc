@@ -18,6 +18,7 @@ augroup END
 let c_space_errors = 1
 let php_space_errors = 1
 let ruby_space_errors = 1
+let xml_syntax_folding = 1
 
 set modelines=3
 set number
