@@ -16,6 +16,11 @@ augroup spellcheck
  autocmd Syntax rspec setlocal spell
 augroup END
 
+augroup whitespace
+ autocmd!
+ autocmd FileType markdown setlocal list listchars=trail:·
+augroup END
+
 let c_space_errors = 1
 let php_space_errors = 1
 let ruby_space_errors = 1
