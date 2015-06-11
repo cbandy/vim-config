@@ -39,7 +39,7 @@ nmap <Leader>R :call RunTestFile(expand('%:.'), line('.'))<CR>
 function! s:RunInSplitWindow(type, cmd)
  let winnr = bufwinnr('^' . a:type . '$')
  silent! execute winnr < 0 ? 'botright new ' . a:type : winnr . 'wincmd w'
- setlocal bufhidden=wipe buftype=nofile modifiable nobuflisted noswapfile nowrap
+ setlocal bufhidden=wipe buftype=nofile modifiable nobuflisted noswapfile
  silent! execute 'setlocal filetype=' . a:type
  silent! execute 'silent %!' . join(map(split(a:cmd), 'expand(v:val)'))
  silent! execute '%substitute/^.*\r//e | :1'
