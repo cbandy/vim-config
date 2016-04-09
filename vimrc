@@ -22,6 +22,7 @@ augroup whitespace
 augroup END
 
 let c_space_errors = 1
+let go_fmt_fail_silently = 1
 let php_space_errors = 1
 let ruby_space_errors = 1
 let xml_syntax_folding = 1
@@ -41,6 +42,8 @@ let mapleader = ","
 nmap <Leader>nt :NERDTreeToggle<CR>
 nmap <Leader>r :call RunTestFile(expand('%:.'))<CR>
 nmap <Leader>R :call RunTestFile(expand('%:.'), line('.'))<CR>
+
+nmap <C-i> <Plug>(go-info)
 
 function! s:RunInSplitWindow(type, cmd)
  let winnr = bufwinnr('^' . a:type . '$')
