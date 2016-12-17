@@ -6,6 +6,7 @@ augroup indentation
  autocmd FileType go setlocal shiftwidth=2 tabstop=2
  autocmd FileType php setlocal shiftwidth=4 tabstop=4
  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
+ autocmd FileType sql  setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
 augroup END
 
@@ -18,7 +19,9 @@ augroup END
 
 augroup whitespace
  autocmd!
+ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
  autocmd FileType markdown setlocal list listchars=trail:·
+ autocmd FileType sql syn match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
 augroup END
 
 let c_space_errors = 1
@@ -26,9 +29,10 @@ let go_fmt_command = 'goimports'
 let go_fmt_fail_silently = 1
 let php_space_errors = 1
 let ruby_space_errors = 1
+let sql_type_default = 'pgsql'
 let xml_syntax_folding = 1
 
-set modelines=3
+set modeline modelines=3
 set number
 set relativenumber
 set ruler
@@ -81,7 +85,7 @@ function! RunTestFile(file, ...)
    \ 'rspec ' . (line > 0 ? file . ':' . line : file))
 
  elseif match(file, '[.]sql$') != -1
-  call s:RunInSplitWindow('',
+  call s:RunInSplitWindow('pgtap-result',
    \ 'psql -Atqf ' . file)
 
  endif
