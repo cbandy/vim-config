@@ -1,3 +1,4 @@
+set nocompatible
 call plug#begin('~/.vim/plugged')
 
 Plug 'airblade/vim-gitgutter'
@@ -6,7 +7,7 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elzr/vim-json'
 Plug 'exu/pgsql.vim'
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'tag': '*' }
 "Plug 'jistr/vim-nerdtree-tabs'
 Plug 'juvenn/mustache.vim'
 Plug 'rking/ag.vim'
