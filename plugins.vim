@@ -17,7 +17,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'vim-ruby/vim-ruby'
-Plug 'Keithbsmiley/rspec.vim'
+Plug 'keith/rspec.vim'
 "Plug 'OrangeT/vim-csharp'
 
 call plug#end()
