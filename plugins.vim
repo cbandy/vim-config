@@ -10,6 +10,7 @@ Plug 'exu/pgsql.vim'
 Plug 'fatih/vim-go', { 'tag': '*' }
 "Plug 'jistr/vim-nerdtree-tabs'
 Plug 'juvenn/mustache.vim'
+Plug 'leafgarland/typescript-vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
