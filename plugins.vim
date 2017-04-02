@@ -7,7 +7,7 @@ Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elzr/vim-json'
 Plug 'exu/pgsql.vim'
-Plug 'fatih/vim-go', { 'tag': '*' }
+Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoInstallBinaries' }
 "Plug 'jistr/vim-nerdtree-tabs'
 Plug 'juvenn/mustache.vim'
 Plug 'leafgarland/typescript-vim'
