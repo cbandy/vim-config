@@ -67,8 +67,8 @@ function! RunTestFile(file, ...)
  let line = a:0 > 0 ? a:1 : 0
 
  if match(file, '[.]feature$') != -1
-  call s:RunInSplitWindow('',
-   \ 'cucumber ' . (line > 0 ? file . ':' . line : file))
+  call s:RunInSplitWindow('cucumber-result',
+   \ 'cucumber ' . (line > 0 ? '-f pretty ' . file . ':' . line : '-f progress ' . file))
 
  elseif match(file, '[.]go$') != -1
   call s:RunInSplitWindow('go-test-result',
