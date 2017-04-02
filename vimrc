@@ -11,6 +11,12 @@ augroup indentation
  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
 augroup END
 
+" https://wiki.postgresql.org/wiki/Developer_FAQ
+augroup postgres-project
+ autocmd!
+ autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal expandtab autoindent cindent tabstop=4 shiftwidth=4 cinoptions="(0,t0"
+augroup END
+
 augroup spellcheck
  autocmd!
  autocmd FileType gitcommit setlocal spell
