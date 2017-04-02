@@ -16,9 +16,12 @@ Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-pathogen'
 Plug 'tpope/vim-surround'
 Plug 'vim-ruby/vim-ruby'
 Plug 'keith/rspec.vim'
 "Plug 'OrangeT/vim-csharp'
 
 call plug#end()
+
+silent! execute pathogen#infect()
