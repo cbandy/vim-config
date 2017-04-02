@@ -89,5 +89,9 @@ function! RunTestFile(file, ...)
   call s:RunInSplitWindow('pgtap-result',
    \ 'psql -Atqf ' . file)
 
+ elseif match(file, 'test[.]sh$') != -1
+  call s:RunInSplitWindow('shell-test-result',
+   \ file)
+
  endif
 endfunction
