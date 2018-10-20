@@ -4,6 +4,7 @@ augroup indentation
  autocmd!
  autocmd FileType cucumber   setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2
+ autocmd FileType python     setlocal expandtab shiftwidth=4 tabstop=4
  autocmd FileType go   setlocal shiftwidth=2 tabstop=2
  autocmd FileType php  setlocal shiftwidth=4 tabstop=4
  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
