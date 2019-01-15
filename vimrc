@@ -1,4 +1,4 @@
-source ~/.vim/plugins.vim
+execute 'source '.fnamemodify(resolve(expand('$MYVIMRC')),':p:h').'/plugins.vim'
 
 augroup mine
  autocmd!

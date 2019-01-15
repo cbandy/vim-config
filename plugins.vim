@@ -1,5 +1,5 @@
 set nocompatible
-call plug#begin('~/.vim/plugged')
+call plug#begin(fnamemodify(resolve(expand('$MYVIMRC')),':p:h').'/plugged')
 
 Plug 'airblade/vim-gitgutter'
 "Plug 'astashov/vim-ruby-debugger'
