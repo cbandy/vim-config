@@ -1,7 +1,35 @@
 source ~/.vim/plugins.vim
 
-augroup indentation
+augroup mine
  autocmd!
+
+ " Dispatch
+ autocmd FileType cucumber |
+  \ let b:dispatch = 'cucumber %'
+  \ . ':s/^/\=exists("l#") ? "-f pretty " : "-f progress "/'
+  \ . ':s/$/\=exists("l#") ? ":".l# : ""/'
+ autocmd FileType go |
+  \ let b:dispatch = 'go test %'
+  \ . ':.:h:s#^[.]\@!#./#'
+  \ . ':s/$/\=exists("l#") ? " -v -run ''^".matchstr(getline(search("^func Test", "bcnW")), "Test[a-zA-Z0-9_]*")."$''" : ""/'
+ autocmd FileType php |
+  \ if expand('%') =~# '[Tt]est[.]php$' |
+  \  let b:dispatch = 'phpunit %' |
+  \ endif
+ autocmd FileType python |
+  \ let b:dispatch = 'pytest %'
+ autocmd Syntax rspec |
+  \ let b:dispatch = 'rspec %'
+  \ . ':s/$/\=exists("l#") ? ":".l# : ""/'
+ autocmd FileType sh |
+  \ if expand('%') =~# 'test[.]sh$' |
+  \  let b:dispatch = '%:s#^#./#'
+  \  . ':s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/' |
+  \ endif
+ autocmd FileType sql |
+  \ let b:dispatch = 'psql -Atqf %'
+
+ " Indentation
  autocmd FileType cucumber   setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType javascript setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType python     setlocal expandtab shiftwidth=4 tabstop=4
@@ -11,23 +39,16 @@ augroup indentation
  autocmd FileType sh   setlocal shiftwidth=0 tabstop=4
  autocmd FileType sql  setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
-augroup END
 
-" https://wiki.postgresql.org/wiki/Developer_FAQ
-augroup postgres-project
- autocmd!
+ " https://wiki.postgresql.org/wiki/Developer_FAQ
  autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal expandtab autoindent cindent tabstop=4 shiftwidth=4 cinoptions="(0,t0"
-augroup END
 
-augroup spellcheck
- autocmd!
+ " Spelling
  autocmd FileType gitcommit setlocal spell
  autocmd FileType markdown setlocal spell
  autocmd Syntax rspec setlocal spell
-augroup END
 
-augroup whitespace
- autocmd!
+ " Whitespace
  autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
  autocmd FileType markdown setlocal list listchars=trail:·
  autocmd FileType sql syn match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
@@ -40,6 +61,7 @@ let dbext_default_passwd = ''
 let dbext_default_type = 'PGSQL'
 let dbext_default_use_tbl_alias = 'n'
 let dbext_default_user = ''
+let g:dispatch_compilers = {'bundle exec': ''}
 let go_fmt_command = 'goimports'
 let go_fmt_fail_silently = 1
 let php_space_errors = 1
@@ -61,52 +83,7 @@ endif
 
 let mapleader = ","
 nmap <Leader>nt :NERDTreeToggle<CR>
-nmap <Leader>r :call RunTestFile(expand('%:.'))<CR>
-nmap <Leader>R :call RunTestFile(expand('%:.'), line('.'))<CR>
+nnoremap <Leader>r :Dispatch<CR>
+nnoremap <Leader>R :.Dispatch<CR>
 
 "nmap <C-j> <Plug>(go-info)
-
-function! s:RunInSplitWindow(type, cmd)
- let winnr = bufwinnr('^' . a:type . '$')
- silent! execute winnr < 0 ? 'botright new ' . a:type : winnr . 'wincmd w'
- setlocal bufhidden=wipe buftype=nofile modifiable nobuflisted noswapfile
- silent! execute 'setlocal filetype=' . a:type
- silent! execute 'silent %!' . join(map(split(a:cmd), 'expand(v:val)'))
- silent! execute '%substitute/^.*\r//e | :1'
- silent! execute 'resize ' . line('$')
- silent! execute 'nnoremap <silent> <buffer> q :q!<CR>'
- setlocal nomodifiable
-endfunction
-
-function! RunTestFile(file, ...)
- let file = a:file
- let line = a:0 > 0 ? a:1 : 0
-
- if match(file, '[.]feature$') != -1
-  call s:RunInSplitWindow('cucumber-result',
-   \ 'cucumber ' . (line > 0 ? '-f pretty ' . file . ':' . line : '-f progress ' . file))
-
- elseif match(file, '[.]go$') != -1
-  call s:RunInSplitWindow('go-test-result',
-   \ 'go test '
-   \ . (file == expand('%:.') ? expand('%:.:h:s#^[.]\@!#./#') : file)
-   \ . (line > 0 ? ' -v -run "^' . matchstr(getline(search('^func Test', 'bcnW')), 'Test[a-zA-Z0-9_]*') . '$"' : ''))
-
- elseif match(file, '[Tt]est[.]php$') != -1
-  call s:RunInSplitWindow('',
-   \ 'phpunit ' . file)
-
- elseif match(file, '[Ss]pec[.]rb$') != -1
-  call s:RunInSplitWindow('rspec-result',
-   \ 'rspec ' . (line > 0 ? file . ':' . line : file))
-
- elseif match(file, '[.]sql$') != -1
-  call s:RunInSplitWindow('pgtap-result',
-   \ 'psql -Atqf ' . file)
-
- elseif match(file, 'test[.]sh$') != -1
-  call s:RunInSplitWindow('shell-test-result',
-   \ file)
-
- endif
-endfunction
