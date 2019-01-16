@@ -55,12 +55,6 @@ augroup mine
 augroup END
 
 let c_space_errors = 1
-let dbext_default_dbname = '@askb'
-let dbext_default_history_file = '/dev/null'
-let dbext_default_passwd = ''
-let dbext_default_type = 'PGSQL'
-let dbext_default_use_tbl_alias = 'n'
-let dbext_default_user = ''
 let g:dispatch_compilers = {'bundle exec': ''}
 let go_fmt_command = 'goimports'
 let go_fmt_fail_silently = 1
