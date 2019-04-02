@@ -3,7 +3,7 @@ call plug#begin(fnamemodify(resolve(expand('$MYVIMRC')),':p:h').'/plugged')
 
 Plug 'airblade/vim-gitgutter'
 "Plug 'astashov/vim-ruby-debugger'
-Plug 'chriskempson/vim-tomorrow-theme'
+Plug 'chriskempson/base16-vim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoInstallBinaries' }

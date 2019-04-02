@@ -72,7 +72,8 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set switchbuf=useopen
 
 if &t_Co == 256
- colorscheme Tomorrow-Night-Bright
+ set termguicolors
+ colorscheme base16-tomorrow-night
 endif
 
 let mapleader = ","
