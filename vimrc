@@ -40,8 +40,8 @@ augroup mine
  autocmd FileType sql  setlocal expandtab shiftwidth=2 tabstop=2
  autocmd FileType yaml setlocal expandtab shiftwidth=2 tabstop=2
 
- " https://wiki.postgresql.org/wiki/Developer_FAQ
- autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal expandtab autoindent cindent tabstop=4 shiftwidth=4 cinoptions="(0,t0"
+ " https://github.com/postgres/postgres/blob/master/src/tools/editors/vim.samples
+ autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal cindent cinoptions="(0" shiftwidth=4 tabstop=4
 
  " Spelling
  autocmd FileType gitcommit setlocal spell
