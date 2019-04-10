@@ -8,6 +8,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elzr/vim-json'
 Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoInstallBinaries' }
 "Plug 'jistr/vim-nerdtree-tabs'
+Plug 'jparise/vim-graphql'
 Plug 'juvenn/mustache.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'lifepillar/pgsql.vim'
