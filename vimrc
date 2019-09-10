@@ -73,6 +73,7 @@ set relativenumber
 set ruler
 set spellfile=~/.vim/spell/en.utf-8.add
 set switchbuf=useopen
+set updatetime=1000
 
 if &t_Co == 256
  set termguicolors
