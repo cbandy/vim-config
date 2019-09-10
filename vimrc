@@ -61,10 +61,11 @@ let go_fmt_command = 'goimports'
 let go_fmt_fail_silently = 1
 let g:NERDTreeDirArrowCollapsible = '~'
 let g:NERDTreeDirArrowExpandable  = '+'
+let g:pgsql_pl = ['python', 'r', 'ruby']
 let php_space_errors = 1
 let ruby_space_errors = 1
 let sh_fold_enabled = 7 " function, heredoc, and control folding
-let sql_type_default = 'pgsql'
+let g:sql_type_default = 'pgsql'
 let xml_syntax_folding = 1
 
 set modeline modelines=3
