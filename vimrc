@@ -56,6 +56,7 @@ augroup mine
 augroup END
 
 let c_space_errors = 1
+let g:ansible_template_syntaxes = {'*.json.j2': 'json', '*.sh.j2': 'sh', '*.yaml.j2': 'yaml'}
 let g:dispatch_compilers = {'bundle exec': ''}
 let go_fmt_command = 'goimports'
 let go_fmt_fail_silently = 1

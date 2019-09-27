@@ -12,6 +12,7 @@ Plug 'jparise/vim-graphql'
 Plug 'juvenn/mustache.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'lifepillar/pgsql.vim'
+Plug 'pearofducks/ansible-vim'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tpope/vim-dadbod'
