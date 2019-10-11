@@ -51,6 +51,7 @@ augroup mine
  " Whitespace
  autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
  autocmd FileType markdown setlocal list listchars=trail:·
+ autocmd FileType sh syn match ExtraWhitespace /\s\+$/
  autocmd FileType sql syn match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
  autocmd FileType yaml setlocal list listchars=trail:·
 augroup END
