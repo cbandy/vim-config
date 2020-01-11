@@ -65,6 +65,7 @@ let g:NERDTreeDirArrowCollapsible = '~'
 let g:NERDTreeDirArrowExpandable  = '+'
 let g:pgsql_pl = ['python', 'r', 'ruby']
 let php_space_errors = 1
+let g:polyglot_disabled = ['go', 'yaml']
 let ruby_space_errors = 1
 let sh_fold_enabled = 7 " function, heredoc, and control folding
 let g:sql_type_default = 'pgsql'
