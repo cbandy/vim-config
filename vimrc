@@ -1,3 +1,18 @@
+let g:ansible_template_syntaxes = {'*.json.j2': 'json', '*.sh.j2': 'sh', '*.yaml.j2': 'yaml'}
+let g:c_space_errors = 1
+let g:dispatch_compilers = {'bundle exec': ''}
+let g:go_fmt_command = 'goimports'
+let g:go_fmt_fail_silently = 1
+let g:NERDTreeDirArrowCollapsible = '~'
+let g:NERDTreeDirArrowExpandable  = '+'
+let g:pgsql_pl = ['python', 'r', 'ruby']
+let g:php_space_errors = 1
+let g:polyglot_disabled = ['go', 'yaml']
+let g:ruby_space_errors = 1
+let g:sh_fold_enabled = 7 " function, heredoc, and control folding
+let g:sql_type_default = 'pgsql'
+let g:xml_syntax_folding = 1
+
 execute 'source '.fnamemodify(resolve(expand('$MYVIMRC')),':p:h').'/plugins.vim'
 
 augroup mine
@@ -55,21 +70,6 @@ augroup mine
  autocmd FileType sql syn match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
  autocmd FileType yaml,yaml.* setlocal list listchars=trail:·
 augroup END
-
-let c_space_errors = 1
-let g:ansible_template_syntaxes = {'*.json.j2': 'json', '*.sh.j2': 'sh', '*.yaml.j2': 'yaml'}
-let g:dispatch_compilers = {'bundle exec': ''}
-let go_fmt_command = 'goimports'
-let go_fmt_fail_silently = 1
-let g:NERDTreeDirArrowCollapsible = '~'
-let g:NERDTreeDirArrowExpandable  = '+'
-let g:pgsql_pl = ['python', 'r', 'ruby']
-let php_space_errors = 1
-let g:polyglot_disabled = ['go', 'yaml']
-let ruby_space_errors = 1
-let sh_fold_enabled = 7 " function, heredoc, and control folding
-let g:sql_type_default = 'pgsql'
-let xml_syntax_folding = 1
 
 set modeline modelines=3
 set number
