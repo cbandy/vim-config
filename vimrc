@@ -45,15 +45,15 @@ augroup mine
   \ let b:dispatch = 'psql -Atqf %'
 
  " Indentation
- autocmd FileType cucumber    setlocal expandtab shiftwidth=2 tabstop=2
- autocmd FileType javascript  setlocal expandtab shiftwidth=2 tabstop=2
- autocmd FileType python      setlocal expandtab shiftwidth=4 tabstop=4
- autocmd FileType go          setlocal           shiftwidth=2 tabstop=2
- autocmd FileType php         setlocal           shiftwidth=4 tabstop=4
- autocmd FileType ruby        setlocal expandtab shiftwidth=2 tabstop=2
- autocmd FileType sh,sh.*     setlocal           shiftwidth=0 tabstop=4
- autocmd FileType sql         setlocal expandtab shiftwidth=2 tabstop=2
- autocmd FileType yaml,yaml.* setlocal expandtab shiftwidth=2 tabstop=2
+ autocmd FileType cucumber    setlocal expandtab tabstop=2
+ autocmd FileType javascript  setlocal expandtab tabstop=2
+ autocmd FileType python      setlocal expandtab tabstop=4
+ autocmd FileType go          setlocal           tabstop=2
+ autocmd FileType php         setlocal           tabstop=4
+ autocmd FileType ruby        setlocal expandtab tabstop=2
+ autocmd FileType sh,sh.*     setlocal           tabstop=4
+ autocmd FileType sql         setlocal expandtab tabstop=2
+ autocmd FileType yaml,yaml.* setlocal expandtab tabstop=2
 
  " https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/tools/editors/vim.samples
  autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal cindent cinoptions=(0 shiftwidth=4 tabstop=4
@@ -66,8 +66,8 @@ augroup mine
  " Whitespace
  autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
  autocmd FileType markdown setlocal list listchars=trail:·
- autocmd FileType sh,sh.* syn match ExtraWhitespace /\s\+$/
- autocmd FileType sql syn match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
+ autocmd FileType sh,sh.* syntax match ExtraWhitespace /\s\+$/
+ autocmd FileType sql syntax match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
  autocmd FileType yaml,yaml.* setlocal list listchars=trail:·
 augroup END
 
@@ -75,6 +75,7 @@ set modeline modelines=3
 set number
 set relativenumber
 set ruler
+set shiftwidth=0 " Follow 'tabstop'
 set spellfile=~/.vim/spell/en.utf-8.add
 set switchbuf=useopen
 set updatetime=1000
