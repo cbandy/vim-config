@@ -9,6 +9,6 @@
 cd
 git clone https://github.com/cbandy/vim-config.git .vim
 ln -s .vim/vimrc .vimrc
-ln -s .vim/gvimrc .gvimrc
-( cd .vim && vim -u plugins.vim '+PlugUpgrade' '+PlugInstall' )
+
+.vim/lua/plugins.lua '+PlugUpgrade' '+PlugInstall'
 ```

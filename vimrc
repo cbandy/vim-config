@@ -1,93 +1,31 @@
-let g:ansible_template_syntaxes = {'*.json.j2': 'json', '*.sh.j2': 'sh', '*.yaml.j2': 'yaml'}
-let g:c_space_errors = 1
-let g:dispatch_compilers = {'bundle exec': ''}
-let g:go_fmt_command = 'goimports'
-let g:go_fmt_fail_silently = 1
-let g:NERDTreeDirArrowCollapsible = '~'
-let g:NERDTreeDirArrowExpandable  = '+'
-let g:pgsql_pl = ['python', 'r', 'ruby']
-let g:php_space_errors = 1
-let g:polyglot_disabled = ['dockerfile', 'go', 'yaml']
-let g:ruby_space_errors = 1
-let g:sh_fold_enabled = 7 " function, heredoc, and control folding
-let g:sql_type_default = 'pgsql'
-let g:xml_syntax_folding = 1
+" vim: expandtab shiftwidth=0 tabstop=1
+" Get the absolute path to the configuration directory.
+let s:dir = fnamemodify(resolve(expand('$MYVIMRC')),':p:h')
 
-execute 'source '.fnamemodify(resolve(expand('$MYVIMRC')),':p:h').'/plugins.vim'
+" Disable some built-in Vim features and plugins.
+execute 'source '.s:dir.'/globals.vim'
 
-augroup mine
- autocmd!
+" Describe some plugins, but do not assume they are installed.
+call plug#begin(s:dir.'/plugged')
+ Plug 'https://git::@github.com/chriskempson/base16-vim.git'
+call plug#end()
 
- " Dispatch
- autocmd FileType cucumber |
-  \ let b:dispatch = 'cucumber %'
-  \ . ':s/^/\=exists("l#") ? "-f pretty " : "-f progress "/'
-  \ . ':s/$/\=exists("l#") ? ":".l# : ""/'
- autocmd FileType go |
-  \ let b:dispatch = 'go test %'
-  \ . ':.:h:s#^[.]\@!#./#'
-  \ . ':s/$/\=exists("l#") ? " -v -run ''^".matchstr(getline(search("^func Test", "bcnW")), "Test[a-zA-Z0-9_]*")."$''" : ""/'
- autocmd FileType php |
-  \ if expand('%') =~# '[Tt]est[.]php$' |
-  \  let b:dispatch = 'phpunit %' |
-  \ endif
- autocmd FileType python |
-  \ let b:dispatch = 'pytest %'
- autocmd Syntax rspec |
-  \ let b:dispatch = 'rspec %'
-  \ . ':s/$/\=exists("l#") ? ":".l# : ""/'
- autocmd FileType sh |
-  \ if expand('%') =~# 'test[.]sh$' |
-  \  let b:dispatch = '%:s#^#./#'
-  \  . ':s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/' |
-  \ endif
- autocmd FileType sql |
-  \ let b:dispatch = 'psql -Atqf %'
+" The Vim default color scheme is difficult to read.
+" Use another scheme when the terminal supports modern colors.
+if &t_Co == 256 || &termguicolors
+ " Assume that a terminal reporting support for 256 colors can do more.
+ set termguicolors
 
- " Indentation
- autocmd FileType cucumber    setlocal expandtab tabstop=2
- autocmd FileType javascript  setlocal expandtab tabstop=2
- autocmd FileType python      setlocal expandtab tabstop=4
- autocmd FileType go          setlocal           tabstop=2
- autocmd FileType php         setlocal           tabstop=4
- autocmd FileType ruby        setlocal expandtab tabstop=2
- autocmd FileType sh,sh.*     setlocal           tabstop=4
- autocmd FileType sql         setlocal expandtab tabstop=2
- autocmd FileType yaml,yaml.* setlocal expandtab tabstop=2
+ " vim-plug does not emit User events for plugins that lack a 'plugin'
+ " directory. Search for the 'base16-vim' schemes instead.
+ if len(globpath(&runtimepath, 'colors/base16-tomorrow-night.vim', 0, 1))
+  colorscheme base16-tomorrow-night
+ else
+  colorscheme evening
+ endif
+endif
 
- " https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/tools/editors/vim.samples
- autocmd BufNewFile,BufRead $HOME/postgresql/*.[ch] setlocal cindent cinoptions=(0 shiftwidth=4 tabstop=4
-
- " Spelling
- autocmd FileType gitcommit setlocal spell
- autocmd FileType markdown setlocal spell
- autocmd Syntax rspec setlocal spell
-
- " Whitespace
- autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
- autocmd FileType markdown setlocal list listchars=trail:·
- autocmd FileType sh,sh.* syntax match ExtraWhitespace /\s\+$/
- autocmd FileType sql syntax match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
- autocmd FileType yaml,yaml.* setlocal list listchars=trail:·
-augroup END
-
-set modeline modelines=3
 set number
 set relativenumber
 set ruler
 set shiftwidth=0 " Follow 'tabstop'
-set spellfile=~/.vim/spell/en.utf-8.add
-set switchbuf=useopen
-set updatetime=1000
-
-if &t_Co == 256
- set termguicolors
- colorscheme base16-tomorrow-night
-endif
-
-let mapleader = ","
-nmap <Leader>nt :NERDTreeToggle<CR>
-nnoremap <Leader>r :Dispatch<CR>
-nnoremap <Leader>R :.Dispatch<CR>
-
-"nmap <C-j> <Plug>(go-info)
