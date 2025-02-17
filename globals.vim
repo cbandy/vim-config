@@ -13,6 +13,9 @@ let g:loaded_ruby_provider = 0
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
+" do not automatically download missing word lists [:h spellfile.vim]
+let g:loaded_spellfile_plugin = 1
+
 " do not load plugins for editing compressed files [:h gzip] [:h tar] [:h zip]
 let g:loaded_gzip = 1
 let g:loaded_tar = 1
