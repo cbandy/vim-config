@@ -1,5 +1,5 @@
 #!/usr/bin/env -S nvim -u
--- vim: set foldcolumn=2 foldmethod=marker noexpandtab shiftwidth=0 tabstop=2 :
+-- vim: set foldcolumn=1 foldmethod=marker :
 --
 -- https://github.com/junegunn/vim-plug#readme
 
@@ -34,7 +34,7 @@ local function Plug(url, ...)
 
 	for k, v in pairs(opts.globals or {}) do vim.g[k] = v end
 
-	-- :memo: https://github.com/junegunn/vim-plug/wiki/api#autocmds
+	-- 📝 https://github.com/junegunn/vim-plug/wiki/api#autocmds
 
 	vim.call('plug#', url, opts)
 end
@@ -59,7 +59,7 @@ Plug('github.com/fatih/vim-go', {
 	for_filetype = {'go'},
 })
 Plug('github.com/junegunn/fzf', {
-	after_update = function() vim.call('fzf#install') end,
+	after_update = ':call fzf#install()',
 })
 Plug('github.com/junegunn/fzf.vim')
 Plug('github.com/lifepillar/pgsql.vim', {

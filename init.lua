@@ -1,4 +1,4 @@
--- vim: set foldcolumn=2 foldmethod=marker noexpandtab shiftwidth=0 tabstop=2 :
+-- vim: set foldcolumn=1 foldmethod=marker :
 
 -- {{{ Imports --
 
@@ -49,9 +49,9 @@ vim.opt.updatetime = 1000 -- milliseconds
 vim.opt.wildignore:append {'*.DS_Store', '*/.git/*'}
 vim.opt.wildignorecase = true
 
--- built-in syntaxes need to be configured before their first use. 
+-- built-in syntaxes need to be configured before their first use.
 -- C [:h ft-c-syntax]
-vim.g.c_space_errors = true 
+vim.g.c_space_errors = true
 -- Ruby [:h ft-ruby-syntax]
 vim.g.ruby_space_errors = true
 -- XML [:h ft-xml-syntax

@@ -1,4 +1,4 @@
-" vim: expandtab shiftwidth=0 tabstop=1
+" vim: expandtab shiftwidth=0 tabstop=1 :
 " Get the absolute path to the configuration directory.
 let s:dir = fnamemodify(resolve(expand('$MYVIMRC')),':p:h')
 
