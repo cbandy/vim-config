@@ -5,19 +5,17 @@
 
 -- {{{ Setup --
 
+local names = {}
 local vim = vim
 
-local function Plug(url, ...)
+-- Use a more general shorthand for referencing plugin URLs.
+--
+-- https://github.com/junegunn/vim-plug#global-options
+vim.g.plug_url_format = 'https://git::@%s.git'
+
+local function Plug(short, ...)
 	local opts = vim.empty_dict()
 	for _, v in ipairs({...}) do opts = v end
-
-	-- Use a different shorthand for referencing plugin URLs.
-	-- This could also be done with "g:plug_url_format".
-	--
-	-- https://github.com/junegunn/vim-plug#global-options
-	if not url:match('^https://') then
-		url = 'https://git::@' .. url .. '.git/'
-	end
 
 	-- The "do" and "for" options are Lua keywords and must be enclosed by brackets
 	-- in table constructors. This provides alternate names for those options.
@@ -25,18 +23,44 @@ local function Plug(url, ...)
 	-- https://github.com/junegunn/vim-plug#plug-options
 	opts['do']  = opts['after_update']; opts['after_update'] = nil
 	opts['for'] = opts['for_filetype']; opts['for_filetype'] = nil
+	opts['on']  = opts['load_because']; opts['load_because'] = nil
 
+	-- Empty "for" and "on" options indicate the plugin should not be loaded
+	-- at startup and not removed by PlugClean.
+	--
 	-- https://github.com/junegunn/vim-plug/wiki/tips#conditional-activation
 	if opts.enabled == false then
 		opts['for'] = {}
 		opts['on'] = {}
 	end
 
+	-- Ensure plugins with requirements are defined in the correct order.
+	for _, dep in ipairs(opts.requires or {}) do
+		local exists = vim.g.plugs[names[dep]]
+		if not exists then
+			error(string.format('cannot load %q before %q', short, dep))
+		elseif exists['for'] or exists['on'] then
+			error(string.format('cannot load %q when %q is lazy', short, dep))
+		end
+	end
+
 	for k, v in pairs(opts.globals or {}) do vim.g[k] = v end
 
 	-- 📝 https://github.com/junegunn/vim-plug/wiki/api#autocmds
 
-	vim.call('plug#', url, opts)
+	vim.call('plug#', short, opts)
+
+	-- Read the name and URL given to the plugin and keep them in a lookup table.
+	local name = vim.iter(vim.g.plugs_order):last()
+	local url = vim.g.plugs[name].uri
+	names[name] = name
+	names[short] = name
+	names[url] = name
+
+	-- Ensure everything is loaded over HTTP/2 or HTTPS.
+	if not url:match('^https://') then
+		error(string.format('cannot load %q without https', short))
+	end
 end
 
 -- }}} --
@@ -46,13 +70,13 @@ vim.call('plug#begin', vim.fs.joinpath(vim.fn.stdpath('data'), 'plugged'))
 
 
 Plug('github.com/airblade/vim-gitgutter', {
-	on = {'GitGutterEnable', 'GitGutterBufferEnable'},
+	load_because = {'GitGutterEnable', 'GitGutterBufferEnable'},
 })
 Plug('github.com/chrisbra/unicode.vim', {
 	after_update = ':DownloadUnicode',
 })
 Plug('github.com/ctrlpvim/ctrlp.vim', {
-	on = {'CtrlP'},
+	load_because = {'CtrlP'},
 })
 Plug('github.com/fatih/vim-go', {
 	after_update = ':GoUpdateBinaries',
@@ -67,16 +91,19 @@ Plug('github.com/lifepillar/pgsql.vim', {
 })
 Plug('github.com/neovim/nvim-lspconfig')
 Plug('github.com/nvim-lua/plenary.nvim')
-Plug('github.com/nvim-telescope/telescope.nvim', { -- requires 'plenary.nvim'
+Plug('github.com/nvim-telescope/telescope.nvim', {
 	-- use release branch: https://github.com/nvim-telescope/telescope.nvim#installation
 	branch = '0.1.x',
+	requires = {
+		'github.com/nvim-lua/plenary.nvim',
+	},
 })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	after_update = ':TSUpdate',
 })
 Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects')
 Plug('github.com/preservim/nerdtree', {
-	on = {'NERDTree', 'NERDTreeMirror', 'NERDTreeToggle'},
+	load_because = {'NERDTree', 'NERDTreeMirror', 'NERDTreeToggle'},
 	globals = {
 		-- these affect the 'nerdtree' syntax
 		NERDTreeDirArrowCollapsible = '~',
