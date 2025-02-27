@@ -5,7 +5,7 @@
 local vim = vim
 
 -- Disable some built-in features and plugins first.
--- This is Vimscript so it can also be used by Vim.
+-- This is Vim script so it can also be used by Vim.
 vim.cmd.source(vim.fs.joinpath(vim.fs.dirname(vim.env.MYVIMRC), 'globals.vim'))
 
 -- Load external plugins. This is a separate file so plugins can be installed
@@ -48,17 +48,6 @@ vim.opt.updatetime = 1000 -- milliseconds
 -- ignore some files and directories when globbing [:h 'wildignore']
 vim.opt.wildignore:append {'*.DS_Store', '*/.git/*'}
 vim.opt.wildignorecase = true
-
--- built-in syntaxes need to be configured before their first use.
--- C [:h ft-c-syntax]
-vim.g.c_space_errors = true
--- Ruby [:h ft-ruby-syntax]
-vim.g.ruby_space_errors = true
--- XML [:h ft-xml-syntax
-vim.g.xml_syntax_folding = true
--- Shell [:h ft-sh-syntax]
--- function, heredoc, and control folding
-vim.g.sh_fold_enabled = 1 + 2 + 4
 
 --local lsp = require('lspconfig')
 require('nvim-treesitter.configs').setup({
@@ -105,6 +94,15 @@ vim.keymap.set('n', '<Leader>R', ':.Dispatch<CR>', {
 
 -- }}} --
 
+-- "after/ftplugin" files are loaded after any builtin ones. [:h ftplugin-overrule]
+-- "before/syntax" files are loaded before builtin ones; the builtin will be
+--  skipped if "b:current_syntax" is set. [:h mysyntaxfile-replace]
+--
+-- [before/syntax/c.lua] C
+-- [after/syntax/rspec.vim] RSpec -- https://rspec.info
+-- [before/syntax/ruby.lua] Ruby -- https://ruby-lang.org
+-- [before/syntax/sh.lua] Shell
+-- [before/syntax/xml.lua] XML
 
 local group = vim.api.nvim_create_augroup('mine', { clear = true })
 for _, args in pairs({
@@ -129,7 +127,7 @@ for _, args in pairs({
 
 	-- Whitespace
 	{'ColorScheme', '*', [[
-		highlight ExtraWhitespace ctermbg=red guibg=red
+		highlight default link ExtraWhitespace DiagnosticError
 	]] },
 	{'FileType', {'sh', 'sh.*'}, [[
 		syntax match ExtraWhitespace /\s\+$/

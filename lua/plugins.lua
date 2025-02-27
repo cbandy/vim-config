@@ -121,7 +121,12 @@ Plug('github.com/chriskempson/base16-vim')
 
 Plug('tpope.io/vim/abolish')
 Plug('tpope.io/vim/dadbod')
-Plug('tpope.io/vim/dispatch')
+Plug('tpope.io/vim/dispatch', {
+	load_because = {'Dispatch'},
+	globals = {
+		dispatch_no_maps = true,
+	},
+})
 Plug('tpope.io/vim/endwise')
 Plug('tpope.io/vim/fugitive')
 Plug('tpope.io/vim/surround')

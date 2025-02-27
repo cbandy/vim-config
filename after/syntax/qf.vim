@@ -1,41 +1,41 @@
 " Cucumber
-syn match CucumberResultFailure '\(^|| \)\@<=Failing Scenarios:'
-syn match CucumberResultFailure '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ failed.*'
-syn match CucumberResultPending '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ \(skipped, \d\+ \)\?\(pending\|undefined\).*'
-syn match CucumberResultSuccess '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ passed)'
+syntax match CucumberResultFailure '\(^|| \)\@<=Failing Scenarios:'
+syntax match CucumberResultFailure '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ failed.*'
+syntax match CucumberResultPending '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ \(skipped, \d\+ \)\?\(pending\|undefined\).*'
+syntax match CucumberResultSuccess '\(^|| \)\@<=\d\+ \(scenario\|step\)s\? (\d\+ passed)'
 
-highlight default link CucumberResultFailure Error
-highlight default CucumberResultPending ctermfg=Yellow
-highlight default CucumberResultSuccess ctermfg=Green
+highlight default link CucumberResultFailure DiagnosticError
+highlight default link CucumberResultPending DiagnosticWarn
+highlight default link CucumberResultSuccess DiagnosticOk
 
 " Go Test
-syn match GoTestResultFailure '\(^|| --- \)\@<=FAIL:\@='
-syn match GoTestResultFailure '\(^|| \)\@<=FAIL\t\@='
-syn match GoTestResultSuccess '\(^|| \)\@<=ok\t\@='
+syntax match GoTestResultFailure '\(^||\s\{} --- \)\@<=FAIL:\@='
+syntax match GoTestResultFailure '\(^|| \)\@<=FAIL\s\@='
+syntax match GoTestResultSuccess '\(^|| \)\@<=ok\s\@='
 
-highlight default link GoTestResultFailure Error
-highlight default GoTestResultSuccess ctermfg=Green
+highlight default link GoTestResultFailure DiagnosticError
+highlight default link GoTestResultSuccess DiagnosticOk
 
 " RSpec
-syn match RSpecResultFailure '\(^|| \)\@<=\d\+ examples\?, [1-9]\+\d* failures\?.*'
-syn match RSpecResultPending '\(^|| \)\@<=\d\+ examples\?, 0 failures, \d\+ pending'
-syn match RSpecResultSuccess '\(^|| \)\@<=\d\+ examples\?, 0 failures\(, \d\+ pending\)\@!'
+syntax match RSpecResultFailure '\(^|| \)\@<=\d\+ examples\?, [1-9]\+\d* failures\?.*'
+syntax match RSpecResultPending '\(^|| \)\@<=\d\+ examples\?, 0 failures, \d\+ pending'
+syntax match RSpecResultSuccess '\(^|| \)\@<=\d\+ examples\?, 0 failures\(, \d\+ pending\)\@!'
 
-highlight default link RSpecResultFailure Error
-highlight default RSpecResultPending ctermfg=Yellow
-highlight default RSpecResultSuccess ctermfg=Green
+highlight default link RSpecResultFailure DiagnosticError
+highlight default link RSpecResultPending DiagnosticWarn
+highlight default link RSpecResultSuccess DiagnosticOk
 
 " shUnit2
-syn match shUnit2ResultFailure '\(^|| \)\@<=ASSERT\(:\)\@='
-syn match shUnit2ResultFailure '\(^|| \)\@<=FAILED\( (failures=\d\+)$\)\@='
-syn match shUnit2ResultSuccess '\(^|| \)\@<=OK$'
+syntax match shUnit2ResultFailure '\(^|| \)\@<=ASSERT\(:\)\@='
+syntax match shUnit2ResultFailure '\(^|| \)\@<=FAILED\( (failures=\d\+)$\)\@='
+syntax match shUnit2ResultSuccess '\(^|| \)\@<=OK$'
 
-highlight default link shUnit2ResultFailure Error
-highlight default shUnit2ResultSuccess ctermfg=Green
+highlight default link shUnit2ResultFailure DiagnosticError
+highlight default link shUnit2ResultSuccess DiagnosticOk
 
 " Test Anything Protocol
-syn match TAPResultFailure '\(^|| \)\@<=not ok\>'
-syn match TAPResultSuccess '\(^|| \)\@<=ok\>'
+syntax match TAPResultFailure '\(^|| \)\@<=not ok\>'
+syntax match TAPResultSuccess '\(^|| \)\@<=ok\>'
 
-highlight default link TAPResultFailure Error
-highlight default TAPResultSuccess ctermfg=Green
+highlight default link TAPResultFailure DiagnosticError
+highlight default link TAPResultSuccess DiagnosticOk
