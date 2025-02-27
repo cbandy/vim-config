@@ -15,7 +15,7 @@ require('plugins')
 -- }}} --
 
 
--- use the system clipboard for everything [:h 'clipboard']
+-- use the system clipboard for everything [:help 'clipboard']
 --vim.opt.clipboard:append 'unnamedplus'
 
 vim.opt.foldlevelstart = 1
@@ -23,29 +23,30 @@ vim.opt.mouse = ''
 vim.opt.spellfile = vim.fs.joinpath(vim.fs.dirname(vim.env.MYVIMRC), 'spell', 'en.utf-8.add')
 
 -- show the number of the current line and the distance to other visible lines
--- [:h 'number'] [:h 'cursorline']
+-- [:help 'number'] [:help 'cursorline']
 vim.opt.cursorlineopt = 'number'
 vim.opt.cursorline = true
 vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.ruler = true
--- leave room for signs when there are none [:h signs]
+-- leave room for signs when there are none [:help signs]
 vim.opt.signcolumn = 'yes'
 
--- keep three lines visible above and below the cursor while scrolling [:h 'scrolloff']
+-- keep three lines visible above and below the cursor while scrolling
+-- [:help 'scrolloff']
 vim.opt.scrolloff = 3
 
--- indent according to tabstop [:h 'tabstop']
+-- indent according to tabstop [:help 'tabstop']
 vim.opt.shiftwidth = 0
 
--- open split windows below or to the right of the current window [:h split]
+-- open split windows below or to the right of the current window [:help split]
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- redraw the screen one second after entering normal mode [:h 'updatetime']
+-- redraw the screen one second after entering normal mode [:help 'updatetime']
 vim.opt.updatetime = 1000 -- milliseconds
 
--- ignore some files and directories when globbing [:h 'wildignore']
+-- ignore some files and directories when globbing [:help 'wildignore']
 vim.opt.wildignore:append {'*.DS_Store', '*/.git/*'}
 vim.opt.wildignorecase = true
 
@@ -56,22 +57,26 @@ require('nvim-treesitter.configs').setup({
 		'lua', 'perl', 'php', 'properties', 'psv', 'python', 'ruby', 'rust',
 		'sql', 'tsv', 'tsx', 'typescript', 'vhs', 'vim', 'vimdoc', 'xml', 'yaml',
 	},
+
+	-- Use syntax highlighting for every supported language except a specific few.
+	-- [:help nvim-treesitter-highlight-mod]
 	highlight = {
-		enable = true,
-		use_languagetree = true,
+		enable = true, disable = {},
 	},
-	indent = {
-		enable = true,
-	},
+
+	-- Indentation is experimental; disable it.
+	-- [:help nvim-treesitter-indentation-mod]
+	indent = { enable = false },
 })
-require('telescope').setup({ -- [:h telescope.setup]
+
+require("telescope").setup({ -- [:help telescope.setup]
 	defaults = {
 		layout_strategy = 'vertical',
 		path_display = { shorten = 5 },
 		sorting_strategy = 'ascending',
 	},
 	mappings = {
-		n = { ['q'] = require('telescope.actions').close },
+		n = { ['q'] = require("telescope.actions").close },
 	},
 })
 
@@ -80,23 +85,24 @@ require('telescope').setup({ -- [:h telescope.setup]
 
 vim.g.mapleader = ','
 vim.keymap.set('n', '<space>', 'za', {
-	desc = 'Toggle the fold under the cursor [:h fold-commands]',
+	desc = 'Toggle the fold under the cursor [:help fold-commands]',
 })
 vim.keymap.set('n', '<Leader>nt', ':NERDTreeToggle<CR>', {
-	desc = 'Open or Close the NERDTree explorer [:h NERDTree]',
+	desc = 'Open or Close the NERDTree explorer [:help NERDTree]',
 })
 vim.keymap.set('n', '<Leader>r', ':Dispatch<CR>', {
-	desc = 'Run the compiler defined in b:dispatch [:h :Dispatch]',
+	desc = 'Run the compiler defined in b:dispatch [:help :Dispatch]',
 })
 vim.keymap.set('n', '<Leader>R', ':.Dispatch<CR>', {
-	desc = 'Run the compiler defined in b:dispatch on the current line [:h :Dispatch]',
+	desc = 'Run the compiler defined in b:dispatch on the current line [:help :Dispatch]',
 })
 
 -- }}} --
 
--- "after/ftplugin" files are loaded after any builtin ones. [:h ftplugin-overrule]
+-- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be
---  skipped if "b:current_syntax" is set. [:h mysyntaxfile-replace]
+--  skipped if "b:current_syntax" is set.
+-- [:help ftplugin-overrule] [:help mysyntaxfile-replace]
 --
 -- [before/syntax/c.lua] C
 -- [after/syntax/rspec.vim] RSpec -- https://rspec.info
@@ -106,6 +112,19 @@ vim.keymap.set('n', '<Leader>R', ':.Dispatch<CR>', {
 
 local group = vim.api.nvim_create_augroup('mine', { clear = true })
 for _, args in pairs({
+	-- Use the ":help" command when editing files in my Vim directory.
+	-- Escape the path in the pattern by prepending "%" to non-alphanumeric characters.
+	{'FileType', {'lua', 'vim'}, function()
+		if string.match(
+			vim.fn.expand('%:p'),
+			'^' .. string.gsub(vim.fs.dirname(vim.env.MYVIMRC), '([^%w])', '%%%1')
+		) then
+			-- letters, numbers, apostrophe/quote, colon, hyphen, dot, underscore
+			vim.opt_local.iskeyword = '@,48-57,39,:,45,46,_'
+			vim.opt_local.keywordprg = ':help'
+		end
+	end},
+
 	-- Highlighting
 	{{'BufNewFile','BufRead'}, 'Dockerfile.*', [[ setfiletype dockerfile ]]},
 	{{'BufNewFile','BufReadPost'}, '*', function()
@@ -155,6 +174,9 @@ for _, args in pairs({
 	--{'ColorScheme', 'base16-tomorrow-night', [[ highlight! link Identifier Delimiter ]] },
 
 	-- Dispatch and Tests
+	--
+	-- The variable "l#" evaluates to the line number (range) invoked on :Dispatch.
+	-- See: https://www.github.com/tpope/vim-dispatch/commit/1e9bd0cdbe6975916fa4
 	{'FileType', 'cucumber', function()
 		vim.b.dispatch = 'cucumber %' ..
 			-- Place arguments ahead of the filename. Show the scenario steps when focused.
