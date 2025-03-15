@@ -1,4 +1,4 @@
 local vim = vim
 
--- [:h ft-xml-syntax]
+-- [:help ft-xml-syntax]
 vim.g.xml_syntax_folding = true

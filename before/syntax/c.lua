@@ -1,4 +1,4 @@
 local vim = vim
 
--- [:h ft-c-syntax]
+-- [:help ft-c-syntax]
 vim.g.c_space_errors = true

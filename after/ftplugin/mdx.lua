@@ -1,0 +1,8 @@
+-- Identifying 'mdx' as an additional extension for the 'markdown' filetype
+-- has been sufficient so far.
+--
+-- 🌱 A little bit can be done with tree-sitter queries:
+-- https://phelipetls.github.io/posts/mdx-syntax-highlight-treesitter-nvim
+--
+-- This is the current way to "filetype_to_parsername" in the above:
+-- vim.treesitter.language.register('markdown', 'mdx')

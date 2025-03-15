@@ -104,11 +104,42 @@ vim.keymap.set('n', '<Leader>R', ':.Dispatch<CR>', {
 --  skipped if "b:current_syntax" is set.
 -- [:help ftplugin-overrule] [:help mysyntaxfile-replace]
 --
--- [before/syntax/c.lua] C
--- [after/syntax/rspec.vim] RSpec -- https://rspec.info
--- [before/syntax/ruby.lua] Ruby -- https://ruby-lang.org
--- [before/syntax/sh.lua] Shell
--- [before/syntax/xml.lua] XML
+-- [cols="~,~,~"]
+-- |===
+--
+-- | C | before/syntax/c.lua
+--
+-- | Git | after/ftplugin/gitcommit.lua
+-- | https://git-scm.com
+--
+-- | Go | after/ftplugin/go.lua
+-- | https://go.dev
+--
+-- | Markdown | after/ftplugin/markdown.lua
+-- | https://commonmark.org
+--
+-- | MDX | after/ftplugin/mdx.lua
+-- | https://mdxjs.com
+--
+-- | RSpec | after/syntax/rspec.vim
+-- | https://rspec.info
+--
+-- | Ruby | before/syntax/ruby.lua
+-- | https://ruby-lang.org
+--
+-- | Shell | before/syntax/sh.lua
+--
+-- | XML | before/syntax/xml.lua
+--
+-- |===
+
+vim.filetype.add({
+	extension = {
+		-- https://docs.docker.com/build/concepts/context/#filename-and-location
+		['dockerignore'] = 'gitignore',
+		['mdx'] = 'markdown',
+	},
+})
 
 local group = vim.api.nvim_create_augroup('mine', { clear = true })
 for _, args in pairs({
@@ -126,7 +157,6 @@ for _, args in pairs({
 	end},
 
 	-- Highlighting
-	{{'BufNewFile','BufRead'}, 'Dockerfile.*', [[ setfiletype dockerfile ]]},
 	{{'BufNewFile','BufReadPost'}, '*', function()
 		if vim.call('FugitiveGitDir') then
 			vim.cmd('GitGutterBufferEnable')
@@ -137,11 +167,10 @@ for _, args in pairs({
 	{'FileType', {'cucumber', 'ruby', 'sql'}, { tabstop = 2, expandtab = true }},
 	{'FileType', {'toml', 'yaml', 'yaml.*'}, { tabstop = 2, expandtab = true }},
 	{'FileType', {'python'}, { tabstop = 4, expandtab = true }},
-	{'FileType', {'go', 'php', 'sh', 'sh.*'}, { tabstop = 4 }},
+	{'FileType', {'php', 'sh', 'sh.*'}, { tabstop = 4 }},
 	{'FileType', {'javascript'}, { tabstop = 2 }},
 
 	-- Spelling
-	{'FileType', {'gitcommit', 'markdown'}, { spell = true }},
 	{'Syntax', {'rspec'}, { spell = true }},
 
 	-- Whitespace
@@ -158,18 +187,6 @@ for _, args in pairs({
 		list = true, listchars = 'trail:·',
 	}},
 
-	-- Wrapping
-	{'FileType', 'gitcommit', { colorcolumn = '50,+0' }},
-	{'FileType', 'markdown', { linebreak = true }},
-	{'FileType', 'go', function()
-		vim.opt_local.formatoptions:append {
-			-- continue comments when hitting <Enter> in Insert mode [:h fo-r]
-			r = true,
-			-- continue comments when appending lines in Normal mode [:h fo-o]
-			o = true,
-		}
-	end},
-
 	-- Theme Adjustments
 	--{'ColorScheme', 'base16-tomorrow-night', [[ highlight! link Identifier Delimiter ]] },
 
@@ -183,11 +200,6 @@ for _, args in pairs({
 			[[:s/^/\=exists("l#") ? "--format pretty " : "--format progress "/]] ..
 			-- Append the line number when focused.
 			[[:s/$/\=exists("l#") ? ":".l# : ""/]]
-	end},
-	{'FileType', 'go', function()
-		vim.keymap.set('n', '<Leader>r', '<Plug>(go-diagnostics)', { buffer = true })
-		vim.keymap.set('n', '<Leader>R', '<Plug>(go-test)', { buffer = true })
-		vim.keymap.set('n', '<Leader>T', '<Plug>(go-test-func)', { buffer = true })
 	end},
 	{'FileType', 'php', function()
 		if string.match(vim.fn.expand('%'), '[Tt]est[.]php$') then
