@@ -101,7 +101,16 @@ Plug('github.com/nvim-telescope/telescope.nvim', {
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	after_update = ':TSUpdate',
 })
-Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects')
+Plug('github.com/nvim-treesitter/nvim-treesitter-context', {
+	requires = {
+		'github.com/nvim-treesitter/nvim-treesitter',
+	},
+})
+Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
+	requires = {
+		'github.com/nvim-treesitter/nvim-treesitter',
+	},
+})
 Plug('github.com/preservim/nerdtree', {
 	load_because = {'NERDTree', 'NERDTreeMirror', 'NERDTreeToggle'},
 	globals = {

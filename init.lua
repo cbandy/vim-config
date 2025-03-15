@@ -80,6 +80,11 @@ require("telescope").setup({ -- [:help telescope.setup]
 	},
 })
 
+require('treesitter-context').setup({
+	mode = 'topline',
+	multiline_threshold = 4,
+})
+
 
 -- {{{ Mappings --
 
