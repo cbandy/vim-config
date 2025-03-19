@@ -18,7 +18,11 @@ require('plugins')
 -- use the system clipboard for everything [:help 'clipboard']
 --vim.opt.clipboard:append 'unnamedplus'
 
-vim.opt.foldlevelstart = 1
+-- open files completely folded by default [:help fold.txt]
+-- filetypes and modelines can set this locally.
+vim.opt.foldlevelstart = 0
+vim.opt.foldmethod = 'manual'
+
 vim.opt.mouse = ''
 vim.opt.spellfile = vim.fs.joinpath(vim.fs.dirname(vim.env.MYVIMRC), 'spell', 'en.utf-8.add')
 
