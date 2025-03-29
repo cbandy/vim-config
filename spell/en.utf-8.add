@@ -4,6 +4,7 @@ AWS/=
 failover
 GCP/=
 GitHub/=
+GitOps/=
 Grafana/=
 GraphQL/=
 Kubernetes/=
@@ -36,4 +37,4 @@ UTC/=
 UTF-8/=
 UTF-16/=
 UUID/=
-# [:help spell] [:help spell-wordlist-format]
+## [:help spell] [:help spell-wordlist-format]

@@ -9,7 +9,7 @@ local vim = vim
 -- The builtin "gitcommit" plugin sets 'textwidth' so highlight both of
 -- these columns by default. [$VIMRUNTIME/ftplugin/gitcommit.vim]
 vim.g.gitcommit_summary_length = 50
-vim.opt_local['colorcolumn'] = vim.g.gitcommit_summary_length .. ',+0'
+vim.opt_local.colorcolumn = { vim.g.gitcommit_summary_length, '+0' }
 
 -- highlight misspelled words
-vim.opt_local['spell'] = true
+vim.opt_local.spell = true

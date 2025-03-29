@@ -3,10 +3,11 @@
 -- {{{ Imports --
 
 local vim = vim
+local vim_directory = vim.fs.dirname(vim.env.MYVIMRC)
 
 -- Disable some built-in features and plugins first.
 -- This is Vim script so it can also be used by Vim.
-vim.cmd.source(vim.fs.joinpath(vim.fs.dirname(vim.env.MYVIMRC), 'globals.vim'))
+vim.cmd.source(vim.fs.joinpath(vim_directory, 'globals.vim'))
 
 -- Load external plugins. This is a separate file so plugins can be installed
 -- without being loaded or configured.
@@ -14,6 +15,11 @@ require('plugins')
 
 -- }}} --
 
+-- do not bother with backup files [:help backup]
+vim.opt.backup = false
+vim.opt.backupcopy = 'auto'
+vim.opt.patchmode = ''
+vim.opt.writebackup = false
 
 -- use the system clipboard for everything [:help 'clipboard']
 --vim.opt.clipboard:append 'unnamedplus'
@@ -23,8 +29,10 @@ require('plugins')
 vim.opt.foldlevelstart = 0
 vim.opt.foldmethod = 'manual'
 
+-- do not use the mouse [:help 'mouse']
 vim.opt.mouse = ''
-vim.opt.spellfile = vim.fs.joinpath(vim.fs.dirname(vim.env.MYVIMRC), 'spell', 'en.utf-8.add')
+vim.opt.mousefocus = false
+vim.opt.mousehide = true
 
 -- show the number of the current line and the distance to other visible lines
 -- [:help 'number'] [:help 'cursorline']
@@ -42,6 +50,13 @@ vim.opt.scrolloff = 3
 
 -- indent according to tabstop [:help 'tabstop']
 vim.opt.shiftwidth = 0
+
+-- use and add to the spelling wordlist committed to this Vim directory
+-- show only a few words when suggesting a correction
+-- [:help spell]
+vim.opt.spellfile = vim.fs.joinpath(vim_directory, 'spell', 'en.utf-8.add')
+vim.opt.spelllang = 'en'
+vim.opt.spellsuggest = { 'best', 8 }
 
 -- open split windows below or to the right of the current window [:help split]
 vim.opt.splitbelow = true
