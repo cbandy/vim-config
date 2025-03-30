@@ -72,6 +72,53 @@ vim.opt.updatetime = 1000 -- milliseconds
 vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
 vim.opt.wildignorecase = true
 
+-- [:help vim.diagnostic.Opts]
+vim.diagnostic.config({
+	virtual_text = true,
+})
+
+-- [:help lsp-config]
+vim.lsp.config('*', {
+	root_markers = { '.git' },
+
+	-- [:help vim.lsp.Client]
+	on_attach = function(client, bufnr)
+		if client:supports_method('textDocument/definition') then
+			local opts = { desc = 'vim.lsp.buf.definition()', buffer = bufnr }
+			vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+			vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
+		end
+		if client:supports_method('textDocument/foldingRange') then
+			vim.wo[0][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+		end
+		if client:supports_method('textDocument/formatting') and
+				not client:supports_method('textDocument/willSaveWaitUntil')
+		then
+			vim.api.nvim_create_autocmd('BufWritePre', {
+				group = vim.api.nvim_create_augroup('local.lsp', { clear = false }),
+				buffer = bufnr,
+				callback = function()
+					vim.lsp.buf.format({ bufnr = bufnr, id = client.id })
+				end,
+			})
+		end
+		if client:supports_method('textDocument/typeDefinition') then
+			vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, {
+				desc = 'vim.lsp.buf.type_definition()', buffer = bufnr,
+			})
+		end
+	end,
+})
+vim.lsp.enable({
+	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
+})
+
+-- Explain Neovim workspace to LuaLS
+require('lazydev').setup({
+	debug = false,
+	integrations = { lspconfig = true },
+})
+
 -- Configure builtin and popular highlights using a Base16 palette.
 -- (Not technically a colorscheme.)
 apply(require('local').palettes['tomorrow-night'], function(palette)
@@ -179,6 +226,9 @@ vim.keymap.set('n', '<space>', 'za', {
 vim.keymap.set('n', '<Leader>nt', require("nvim-tree.api").tree.toggle, {
 	desc = 'open or close the file explorer [:help nvim-tree]',
 })
+
+-- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
+vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be

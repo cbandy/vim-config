@@ -84,6 +84,7 @@ Plug('github.com/fatih/vim-go', {
 	after_update = ':GoUpdateBinaries',
 	for_filetype = {'go'},
 })
+Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/junegunn/fzf', {
 	after_update = ':call fzf#install()',
 })
