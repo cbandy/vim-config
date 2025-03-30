@@ -1,0 +1,42 @@
+
+require('neotest').setup({
+  adapters = {
+    require('neotest-golang')({
+			go_test_args = {},
+			runner = 'gotestsum',
+		}),
+		require('rustaceanvim.neotest'),
+  },
+	icons = {
+		failed = '✗',
+		notify = 'ℹ',
+		passed = '✓',
+		running = '🗘', -- '⭮'
+		skipped = '∅',
+		unknown = '?',
+		watching = '🔍',
+	},
+})
+
+
+Plug('github.com/junegunn/fzf.vim', {
+	globals = {
+		fzf_vim = {
+			preview_window = { 'up', 'ctrl-/' },
+		}
+	},
+})
+
+-- TODO: is this just keywords? can i tree-sitter?
+Plug('github.com/keith/rspec.vim')
+
+Plug('github.com/epwalsh/obsidian.nvim', {
+	tag = '*',
+	load_because = { 'ObsidianToday', 'ObsidianWorkspace' },
+	requires = {
+		'github.com/nvim-lua/plenary.nvim',
+		'github.com/nvim-telescope/telescope.nvim',
+	},
+})
+
+Plug('github.com/stevearc/conform.nvim')

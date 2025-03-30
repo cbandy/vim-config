@@ -82,7 +82,7 @@ Plug('github.com/echasnovski/mini.base16')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/fatih/vim-go', {
 	after_update = ':GoUpdateBinaries',
-	for_filetype = {'go'},
+	for_filetype = { 'go' },
 })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/junegunn/fzf', {
@@ -131,9 +131,6 @@ Plug('github.com/vim-test/vim-test', {
 		},
 	},
 })
-
-
---Plug('github.com/stevearc/conform.nvim')
 
 Plug('tpope.io/vim/abolish', {
 	load_because = { 'Abolish', 'Subvert', 'S' },
