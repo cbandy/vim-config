@@ -78,6 +78,8 @@ Plug('github.com/chrisbra/unicode.vim', {
 Plug('github.com/ctrlpvim/ctrlp.vim', {
 	load_because = {'CtrlP'},
 })
+Plug('github.com/echasnovski/mini.base16')
+Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/fatih/vim-go', {
 	after_update = ':GoUpdateBinaries',
 	for_filetype = {'go'},
@@ -118,11 +120,6 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 	},
 })
 
---Plug('github.com/ray-x/go.nvim', {
---	for_filetype = {'go'},
---})
-Plug('github.com/chriskempson/base16-vim')
---Plug('github.com/tinted-theming/tinted-vim') -- Try again after https://www.github.com/tinted-theming/tinted-vim/pull/102
 
 --Plug('github.com/stevearc/conform.nvim')
 
@@ -137,16 +134,6 @@ Plug('tpope.io/vim/dispatch', {
 Plug('tpope.io/vim/endwise')
 Plug('tpope.io/vim/fugitive')
 Plug('tpope.io/vim/surround')
-
--- Plug('https://github.com/stevearc/overseer.nvim.git')
-
--- "Plug 'astashov/vim-ruby-debugger'
--- "Plug 'chriskempson/base16-vim'
--- "Plug 'JoosepAlviste/nvim-ts-context-commentstring'
--- "Plug 'mhinz/vim-signify'
-
--- Plug 'https://tpope.io/vim/pathogen.git'
--- Plug 'OrangeT/vim-csharp'
 
 
 vim.call('plug#end')

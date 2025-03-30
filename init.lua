@@ -2,6 +2,9 @@
 
 -- {{{ Imports --
 
+local function apply(...)
+	local args = { ... }; local fn = table.remove(args); fn(unpack(args))
+end
 local vim = vim
 local vim_directory = vim.fs.dirname(vim.env.MYVIMRC)
 
@@ -68,6 +71,20 @@ vim.opt.updatetime = 1000 -- milliseconds
 -- ignore some files and directories when globbing [:help 'wildignore']
 vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
 vim.opt.wildignorecase = true
+
+-- Configure builtin and popular highlights using a Base16 palette.
+-- (Not technically a colorscheme.)
+apply(require('local').palettes['tomorrow-night'], function(palette)
+	require('mini.base16').setup({ palette = palette })
+
+	-- These guides suggest Identifier be Red, base08:
+	-- https://github.com/chriskempson/base16/blob/-/styling.md
+	-- https://github.com/tinted-theming/home/blob/-/styling.md
+	-- https://github.com/tinted-theming/base24/blob/-/styling.md
+	--
+	-- This sets it to Foreground, base05.
+	vim.api.nvim_set_hl(0, 'Identifier', { fg = palette.base05 })
+end)
 
 require('nvim-tree').setup({
 	diagnostics = {
@@ -239,21 +256,18 @@ for _, args in pairs({
 	{'Syntax', {'rspec'}, { spell = true }},
 
 	-- Whitespace
-	{'ColorScheme', '*', [[
+	{ 'ColorScheme', '*', [[
 		highlight default link ExtraWhitespace DiagnosticError
 	]] },
-	{'FileType', {'sh', 'sh.*'}, [[
+	{ 'FileType', { 'sh', 'sh.*' }, [[
 		syntax match ExtraWhitespace /\s\+$/
 	]] },
-	{'FileType', {'sql'}, [[
+	{ 'FileType', { 'sql' }, [[
 		syntax match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
 	]] },
-	{'FileType', {'markdown', 'yaml', 'yaml.*'}, {
+	{ 'FileType', { 'markdown', 'yaml', 'yaml.*' }, {
 		list = true, listchars = 'trail:·',
-	}},
-
-	-- Theme Adjustments
-	--{'ColorScheme', 'base16-tomorrow-night', [[ highlight! link Identifier Delimiter ]] },
+	} },
 
 	-- Dispatch and Tests
 	--
