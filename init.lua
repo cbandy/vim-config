@@ -222,11 +222,14 @@ require('local').treesitter_setup({
 
 vim.g.mapleader = ','
 vim.keymap.set('n', '<space>', 'za', {
-	desc = 'Toggle the fold under the cursor [:help fold-commands]',
+	desc = 'toggle the fold under the cursor [:help fold-commands]',
+	silent = true,
 })
 vim.keymap.set('n', '<Leader>nt', require("nvim-tree.api").tree.toggle, {
 	desc = 'open or close the file explorer [:help nvim-tree]',
 })
+vim.keymap.set('n', '<Leader>r', ':TestFile<CR>', { silent = true })
+vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
@@ -324,38 +327,23 @@ for _, args in pairs({
 	--
 	-- The variable "l#" evaluates to the line number (range) invoked on :Dispatch.
 	-- See: https://www.github.com/tpope/vim-dispatch/commit/1e9bd0cdbe6975916fa4
-	{'FileType', 'cucumber', function()
-		vim.b.dispatch = 'cucumber %' ..
-			-- Place arguments ahead of the filename. Show the scenario steps when focused.
-			[[:s/^/\=exists("l#") ? "--format pretty " : "--format progress "/]] ..
-			-- Append the line number when focused.
-			[[:s/$/\=exists("l#") ? ":".l# : ""/]]
-	end},
-	{'FileType', 'php', function()
-		if string.match(vim.fn.expand('%'), '[Tt]est[.]php$') then
-			vim.b.dispatch = 'phpunit %'
-		end
-	end},
-	{'FileType', 'python', function()
-		vim.b.dispatch = 'pytest %'
-	end},
-	{'Syntax', 'rspec', function()
-		vim.b.dispatch = 'rspec %' ..
-			-- Append the line number when focused.
-			[[:s/$/\=exists("l#") ? ":".l# : ""/]]
-	end},
-	{'FileType', 'sh', function()
+	{ 'FileType', 'sh', function()
 		if string.match(vim.fn.expand('%'), 'test[.]sh$') then
 			vim.b.dispatch = '%' ..
-				-- Prepend ./ to the filename.
-				[[:s#^#./#]] ..
-				-- Append the test function name when focused.
-				[[:s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/]]
+					-- Prepend ./ to the filename.
+					[[:s#^#./#]] ..
+					-- Append the test function name when focused.
+					-- search()
+					--   "b" backward "n" without moving the cursor,
+					--   "W" stop at the beginning of the file, and
+					--   "c" allow a match on the current line
+					-- matchstr() to grab the entire function name
+					[[:s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/]]
 		end
-	end},
-	{'FileType', 'sql', function()
+	end },
+	{ 'FileType', 'sql', function()
 		vim.b.dispatch = 'psql -Atqf %'
-	end},
+	end },
 }) do
 	-- {{{
 	local opts = { group = group, pattern = args[2] }

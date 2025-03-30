@@ -120,6 +120,17 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 		vim.fn.has('nvim-0.11') <= 0 and 'github.com/nvim-treesitter/nvim-treesitter' or nil,
 	},
 })
+Plug('github.com/vim-test/vim-test', {
+	load_because = { 'TestFile', 'TestNearest' },
+	globals = {
+		['test#strategy'] = 'dispatch',
+		['test#echo_command'] = false,
+		['test#enabled_runners'] = {
+			'go#ginkgo', 'php#phpunit', 'python#pytest',
+			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargotest',
+		},
+	},
+})
 
 
 --Plug('github.com/stevearc/conform.nvim')
@@ -127,13 +138,28 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 Plug('tpope.io/vim/abolish')
 Plug('tpope.io/vim/dadbod')
 Plug('tpope.io/vim/dispatch', {
-	load_because = {'Dispatch'},
+	load_because = { 'Dispatch' },
 	globals = {
 		dispatch_no_maps = true,
+		dispatch_tmux_height = 3,
+		dispatch_compilers = {
+			['bundle exec'] = '',
+			['gotestsum'] = 'go',
+		},
 	},
 })
 Plug('tpope.io/vim/endwise')
 Plug('tpope.io/vim/fugitive')
+Plug('tpope.io/vim/projectionist', {
+	globals = {
+		projectionist_heuristics = {
+			['go.mod|go.work'] = {
+				['*.go'] = { alternate = '{}_test.go', type = 'source' },
+				['*_test.go'] = { alternate = '{}.go', type = 'test' },
+			},
+		},
+	},
+})
 Plug('tpope.io/vim/surround')
 
 
