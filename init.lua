@@ -69,25 +69,6 @@ vim.opt.updatetime = 1000 -- milliseconds
 vim.opt.wildignore:append {'*.DS_Store', '*/.git/*'}
 vim.opt.wildignorecase = true
 
---local lsp = require('lspconfig')
-require('nvim-treesitter.configs').setup({
-	ensure_installed = {
-		'c', 'cpp', 'csv', 'diff', 'editorconfig', 'gotmpl', 'helm', 'json',
-		'lua', 'perl', 'php', 'properties', 'psv', 'python', 'ruby', 'rust',
-		'sql', 'tsv', 'tsx', 'typescript', 'vhs', 'vim', 'vimdoc', 'xml', 'yaml',
-	},
-
-	-- Use syntax highlighting for every supported language except a specific few.
-	-- [:help nvim-treesitter-highlight-mod]
-	highlight = {
-		enable = true, disable = {},
-	},
-
-	-- Indentation is experimental; disable it.
-	-- [:help nvim-treesitter-indentation-mod]
-	indent = { enable = false },
-})
-
 require("telescope").setup({ -- [:help telescope.setup]
 	defaults = {
 		layout_strategy = 'vertical',
@@ -99,13 +80,56 @@ require("telescope").setup({ -- [:help telescope.setup]
 	},
 })
 
-require('treesitter-context').setup({
-	mode = 'topline',
-	multiline_threshold = 4,
+require('local').treesitter_setup({
+	['nvim-treesitter'] = {
+		ensure_install = {
+			-- config and data
+			'csv', 'json', 'pem', 'properties', 'psv', 'toml', 'tsv', 'xml', 'yaml',
+			-- editing
+			'diff', 'editorconfig', 'vim', 'vimdoc',
+			-- interpreted
+			'bash', 'dockerfile', 'helm', 'javascript', 'lua', 'luap', 'perl',
+			'php_only', 'python', 'ruby', 'sql', 'vhs',
+			-- compiled
+			'c', 'cpp', 'go', 'gomod', 'rust', 'typescript',
+			-- presentation
+			'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html',
+			'markdown', 'markdown_inline', 'rst', 'tsx',
+		},
+	},
+	['nvim-treesitter-context'] = {
+		mode = 'topline',
+		multiline_threshold = 4,
+	},
+	['nvim-treesitter.parsers'] = {
+		asciidoc = {
+			install_info = {
+				url = 'https://github.com/cathaysia/tree-sitter-asciidoc',
+				location = 'tree-sitter-asciidoc',
+				files = { 'src/parser.c', 'src/scanner.c' },
+			},
+		},
+		asciidoc_inline = {
+			install_info = {
+				url = 'https://github.com/cathaysia/tree-sitter-asciidoc',
+				location = 'tree-sitter-asciidoc_inline',
+				files = { 'src/parser.c', 'src/scanner.c' },
+			},
+		},
+		jq = {
+			install_info = {
+				url = 'https://github.com/nverno/tree-sitter-jq',
+				files = { 'src/parser.c' },
+			},
+		},
+		make = {
+			install_info = {
+				url = 'https://github.com/tree-sitter-grammars/tree-sitter-make',
+				files = { 'src/parser.c' },
+			},
+		},
+	},
 })
-
-
--- {{{ Mappings --
 
 vim.g.mapleader = ','
 vim.keymap.set('n', '<space>', 'za', {
@@ -114,19 +138,12 @@ vim.keymap.set('n', '<space>', 'za', {
 vim.keymap.set('n', '<Leader>nt', ':NERDTreeToggle<CR>', {
 	desc = 'Open or Close the NERDTree explorer [:help NERDTree]',
 })
-vim.keymap.set('n', '<Leader>r', ':Dispatch<CR>', {
-	desc = 'Run the compiler defined in b:dispatch [:help :Dispatch]',
-})
-vim.keymap.set('n', '<Leader>R', ':.Dispatch<CR>', {
-	desc = 'Run the compiler defined in b:dispatch on the current line [:help :Dispatch]',
-})
-
--- }}} --
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be
 --  skipped if "b:current_syntax" is set.
 -- [:help ftplugin-overrule] [:help mysyntaxfile-replace]
+-- [:help syntax-loading] [:help scriptnames]
 --
 -- [cols="~,~,~"]
 -- |===
@@ -180,9 +197,9 @@ for _, args in pairs({
 		end
 	end},
 
-	-- Highlighting
-	{{'BufNewFile','BufReadPost'}, '*', function()
-		if vim.call('FugitiveGitDir') then
+	{ { 'BufNewFile', 'BufReadPost' }, '*', function()
+		-- enable Git signs only when there is a Git directory
+		if vim.call('FugitiveGitDir') ~= '' then
 			vim.cmd('GitGutterBufferEnable')
 		end
 	end},

@@ -99,6 +99,9 @@ Plug('github.com/nvim-telescope/telescope.nvim', {
 	},
 })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
+	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
+	-- https://github.com/nvim-treesitter/nvim-treesitter/issues/4767
+	branch = vim.fn.has('nvim-0.11') > 0 and 'main' or 'master',
 	after_update = ':TSUpdate',
 })
 Plug('github.com/nvim-treesitter/nvim-treesitter-context', {
@@ -107,8 +110,10 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-context', {
 	},
 })
 Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
+	-- Stability matches nvim-treesitter.
+	branch = vim.fn.has('nvim-0.11') > 0 and 'main' or 'master',
 	requires = {
-		'github.com/nvim-treesitter/nvim-treesitter',
+		vim.fn.has('nvim-0.11') <= 0 and 'github.com/nvim-treesitter/nvim-treesitter' or nil,
 	},
 })
 Plug('github.com/preservim/nerdtree', {
