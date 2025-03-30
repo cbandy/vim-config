@@ -110,6 +110,7 @@ vim.lsp.config('*', {
 	end,
 })
 vim.lsp.enable({
+	'ltexls', -- lsp/ltexls.lua
 	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
 })
 

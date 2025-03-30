@@ -1,6 +1,31 @@
 local vim = vim
 local M = {}
 
+-- This returns an iterator over all the lines in the files of &spellfile.
+function M.spellfile_lines(lang2)
+	return vim.iter(vim.split(vim.o.spellfile, ',', {
+		plain = true, trimempty = true,
+	})):map(function(fn)
+		if vim.fs.basename(fn):sub(1, 2) == lang2 then
+			return vim.iter(io.lines(fn)):totable()
+		end
+		return nil
+	end):flatten()
+end
+
+-- This returns an iterator over all the good words in the files of &spellfile.
+function M.spellfile_good_words(lang2)
+	return M.spellfile_lines(lang2):map(function(line)
+		if line:match('^[^#/]') then
+			local suffix = line:match('/[=?!1-9]*$') or ''
+			if not suffix:match('!') then
+				return line:sub(1, #line - #suffix)
+			end
+		end
+		return nil
+	end)
+end
+
 -- https://github.com/nvim-treesitter/nvim-treesitter/tree/main#supported-features
 function M.treesitter_enable(features)
 	for k, v in pairs(features) do
@@ -24,6 +49,16 @@ function M.treesitter_setup(config)
 			end
 		end
 	})
+end
+
+-- This converts a Vim filetype to a VSCode language identifier.
+-- https://code.visualstudio.com/docs/languages/identifiers
+function M.vscode_language(filetype)
+	return ({
+		gitcommit = 'git-commit',
+		sh = 'shellscript',
+		text = 'plaintext',
+	})[filetype] or filetype
 end
 
 M['palettes'] = {
