@@ -98,6 +98,7 @@ Plug('github.com/nvim-telescope/telescope.nvim', {
 		'github.com/nvim-lua/plenary.nvim',
 	},
 })
+Plug('github.com/nvim-tree/nvim-tree.lua', { tag = '*' })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
 	-- https://github.com/nvim-treesitter/nvim-treesitter/issues/4767
@@ -114,14 +115,6 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 	branch = vim.fn.has('nvim-0.11') > 0 and 'main' or 'master',
 	requires = {
 		vim.fn.has('nvim-0.11') <= 0 and 'github.com/nvim-treesitter/nvim-treesitter' or nil,
-	},
-})
-Plug('github.com/preservim/nerdtree', {
-	load_because = {'NERDTree', 'NERDTreeMirror', 'NERDTreeToggle'},
-	globals = {
-		-- these affect the 'nerdtree' syntax
-		NERDTreeDirArrowCollapsible = '~',
-		NERDTreeDirArrowExpandable  = '+',
 	},
 })
 

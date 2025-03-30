@@ -66,8 +66,32 @@ vim.opt.splitright = true
 vim.opt.updatetime = 1000 -- milliseconds
 
 -- ignore some files and directories when globbing [:help 'wildignore']
-vim.opt.wildignore:append {'*.DS_Store', '*/.git/*'}
+vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
 vim.opt.wildignorecase = true
+
+require('nvim-tree').setup({
+	diagnostics = {
+		enable = true,
+		icons = { hint = '!', info = 'ℹ', warning = '⚠', error = '🔥' },
+	},
+	renderer = {
+		add_trailing = true,
+		full_name = true,
+		group_empty = true,
+		highlight_git = 'icon',
+		indent_markers = { enable = true },
+		icons = {
+			show = { file = false, folder = false, modified = false },
+			symlink_arrow = ' 🡪  ',
+			git_placement = 'after',
+			glyphs = {
+				bookmark = '🞉',
+				folder = { arrow_closed = '⏵', arrow_open = '◼' },
+				git = { deleted = '⊟', staged = '🗹', unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
+			},
+		},
+	},
+})
 
 require("telescope").setup({ -- [:help telescope.setup]
 	defaults = {
@@ -135,8 +159,8 @@ vim.g.mapleader = ','
 vim.keymap.set('n', '<space>', 'za', {
 	desc = 'Toggle the fold under the cursor [:help fold-commands]',
 })
-vim.keymap.set('n', '<Leader>nt', ':NERDTreeToggle<CR>', {
-	desc = 'Open or Close the NERDTree explorer [:help NERDTree]',
+vim.keymap.set('n', '<Leader>nt', require("nvim-tree.api").tree.toggle, {
+	desc = 'open or close the file explorer [:help nvim-tree]',
 })
 
 -- "after/ftplugin" files are loaded after any builtin ones.
