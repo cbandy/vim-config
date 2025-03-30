@@ -83,6 +83,7 @@ vim.lsp.config('*', { ---@type vim.lsp.Config
 	on_attach = require('local').lsp_attach,
 })
 vim.lsp.enable({
+	'gopls', -- lsp/gopls.lua
 	'ltexls', -- lsp/ltexls.lua
 	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
 	'yamlls', -- lsp/yamlls.lua
@@ -271,6 +272,14 @@ for _, args in pairs({
 		if vim.call('FugitiveGitDir') ~= '' then
 			vim.cmd('GitGutterBufferEnable')
 		end
+	end },
+
+	-- These commands are added when the "fatih/vim-go" plugin is loaded,
+	-- but when called incorrectly, they download more tools than necessary.
+	{ 'User', 'vim-go', function()
+		vim
+				.iter({ 'GoInstallBinaries', 'GoUpdateBinaries', 'GoPath' })
+				:each(vim.api.nvim_del_user_command)
 	end },
 
 	-- Indentation

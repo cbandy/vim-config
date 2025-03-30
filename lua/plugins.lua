@@ -80,7 +80,7 @@ Plug('github.com/ctrlpvim/ctrlp.vim', {
 })
 Plug('github.com/dense-analysis/ale', {
 	tag = '*',
-	for_filetype = { 'sh' },
+	for_filetype = { 'go', 'sh' },
 	globals = {
 		-- only use linters that have been enabled
 		ale_disable_lsp = true,
@@ -93,7 +93,10 @@ Plug('github.com/dense-analysis/ale', {
 		ale_set_loclist = false,
 		ale_set_quickfix = true,
 		-- https://github.com/dense-analysis/ale/blob/-/autoload/ale/fixers
-		ale_fixers = {},
+		ale_fixers = {
+			go = { 'goimports', 'gofumpt' },
+			gomod = { 'gomod' },
+		},
 		-- https://github.com/dense-analysis/ale/blob/-/ale_linters
 		ale_linters = {
 			sh = { 'shell', 'shellcheck' },
@@ -105,6 +108,27 @@ Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/fatih/vim-go', {
 	after_update = ':GoUpdateBinaries gopls',
 	for_filetype = { 'go' },
+	globals = {
+		go_code_completion_enabled = false,
+		go_def_mapping_enabled = false,
+		go_doc_keywordprg_enabled = true,
+		go_fillstruct_mode = 'gopls',
+		go_get_update = false,
+		go_jump_to_error = false,
+		go_textobj_enabled = false,
+
+		go_highlight_variable_declarations = true,
+
+		go_asmfmt_autosave = false,
+		go_fmt_autosave = false,
+		go_imports_autosave = false,
+		go_mod_fmt_autosave = false,
+		go_metalinter_autosave = false,
+
+		-- Start or use a shared gopls daemon.
+		-- lsp/gopls.lua
+		go_gopls_options = { '--remote=auto', '--remote.listen.timeout=15s' },
+	},
 })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/junegunn/fzf', {
