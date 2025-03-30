@@ -80,7 +80,7 @@ Plug('github.com/ctrlpvim/ctrlp.vim', {
 })
 Plug('github.com/dense-analysis/ale', {
 	tag = '*',
-	for_filetype = { 'sh' },
+	for_filetype = { 'go', 'gomod', 'sh' },
 	globals = {
 		-- only use linters that have been enabled
 		ale_disable_lsp = true,
@@ -93,7 +93,10 @@ Plug('github.com/dense-analysis/ale', {
 		ale_set_loclist = false,
 		ale_set_quickfix = true,
 		-- https://github.com/dense-analysis/ale/blob/-/autoload/ale/fixers
-		ale_fixers = {},
+		ale_fixers = {
+			go = { 'gofmt' }, -- gofmt is always available
+			gomod = { 'gomod' }, -- gomod is `go mod` and always available
+		},
 		-- https://github.com/dense-analysis/ale/blob/-/ale_linters
 		ale_linters = {
 			sh = { 'shell', 'shellcheck' },
@@ -102,10 +105,6 @@ Plug('github.com/dense-analysis/ale', {
 })
 Plug('github.com/echasnovski/mini.base16')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
-Plug('github.com/fatih/vim-go', {
-	after_update = ':GoUpdateBinaries gopls',
-	for_filetype = { 'go' },
-})
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/junegunn/fzf', {
 	after_update = ':call fzf#install()',
@@ -143,12 +142,11 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 	},
 })
 Plug('github.com/vim-test/vim-test', {
-	load_because = { 'TestFile', 'TestNearest' },
 	globals = {
 		['test#strategy'] = 'dispatch',
 		['test#echo_command'] = false,
 		['test#enabled_runners'] = {
-			'go#ginkgo', 'php#phpunit', 'python#pytest',
+			'go#gotest', 'go#ginkgo', 'php#phpunit', 'python#pytest',
 			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargotest',
 		},
 	},

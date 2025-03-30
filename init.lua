@@ -83,6 +83,7 @@ vim.lsp.config('*', { ---@type vim.lsp.Config
 	on_attach = require('local').lsp_attach,
 })
 vim.lsp.enable({
+	'gopls', -- lsp/gopls.lua
 	'ltexls', -- lsp/ltexls.lua
 	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
 	'yamlls', -- lsp/yamlls.lua
@@ -119,6 +120,7 @@ apply(require('local').palettes['tomorrow-night'], function(palette)
 	-- Underline the text portion of the link, not the URL.
 	vim.api.nvim_set_hl(0, '@markup.link', {})
 	vim.api.nvim_set_hl(0, '@markup.link.label', { link = 'Underlined' })
+	vim.api.nvim_set_hl(0, '@string.special.url.gomod', {})
 end)
 
 require('nvim-tree').setup({

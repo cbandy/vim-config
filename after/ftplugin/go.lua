@@ -1,4 +1,6 @@
 local vim = vim
+local module = vim.fs.root(0, { 'go.mod', 'go.work' })
+local project = vim.fs.root(0, '.git') or vim.fn.getcwd()
 
 vim.opt_local.tabstop = 2
 vim.opt_local.formatoptions:append({
@@ -8,26 +10,48 @@ vim.opt_local.formatoptions:append({
 	o = true,
 })
 
--- [:help b:dispatch]
-vim.b.dispatch = 'go test %' ..
-	-- Get the directory of the relative file path then prepend ./ if it does not already start with dot.
-	[[:.:h:s#^[.]\@!#./#]] ..
-	-- The variable "l#" evaluates to the line number (range) invoked on :Dispatch.
-	-- See: https://www.github.com/tpope/vim-dispatch/commit/1e9bd0cdbe6975916fa4
-	--
-	-- Append the test name when focused.
-	-- search()
-	--   "b" backward "n" without moving the cursor,
-	--   "W" stop at the beginning of the file, and
-	--   "c" allow a match on the current line
-	-- matchstr() to grab the entire function name, and
-	-- pass it to "-run" with anchors at both ends
-	[[:s/$/\=exists("l#") ? " -v -run ''^".matchstr(getline(search("^func Test", "bcnW")), "Test[a-zA-Z0-9_]*")."$''" : ""/]]
+-- gopls formats on save, but also use golangci-lint when it is configured
+if
+		vim.iter({ module, project, }):any(function(dir)
+			return vim.iter({
+				'.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json',
+			}):any(function(name)
+				return nil ~= vim.uv.fs_stat(vim.fs.joinpath(dir, name))
+			end)
+		end)
+then
+	vim.b.ale_fix_on_save = true
+	vim.b.ale_fixers = { 'golangci_lint' }
+	vim.b.ale_linters = { 'golangci_lint' }
+end
 
-vim.api.nvim_buf_create_user_command(0,
-	'GoTestSum', ':Dispatch gotestsum --watch --format-icons=default -- --count=1', {
-		desc = 'Have `gotestsum` watch the entire project for changes',
-	})
-vim.keymap.set('n', '<Leader>r', '<Plug>(go-diagnostics)', { buffer = true })
-vim.keymap.set('n', '<Leader>R', ':GoTest!<CR>', { buffer = true })
-vim.keymap.set('n', '<Leader>T', ':GoTestFunc!<CR>', { buffer = true })
+vim.api.nvim_buf_create_user_command(0, 'GoTestSum', function(details)
+	local wd = details.bang and (module or project) or vim.fn.expand('%:p:h')
+	vim.cmd.Dispatch('-dir=' .. wd, 'gotestsum', '--format-icons=default', '--watch', '--', '--count=1')
+end, {
+	bang = true, desc = 'have `gotestsum` watch a directory for changes',
+})
+
+vim.keymap.set('n', '<Leader>r', function()
+	-- use "-dir" with "dispatch.vim" to populate the quickfix list with proper paths.
+	-- https://github.com/vim-test/vim-test/issues/617
+	vim.cmd.Dispatch('-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', '.')
+end, {
+	buffer = true,
+	desc = 'run all tests in this package',
+})
+
+vim.keymap.set('n', '<Leader>R', function()
+	-- use "test.vim" to find the nearest test function, suite, etc.
+	-- the first item in the returned list is the "-run" flag and value.
+	local cursor = vim.api.nvim_win_get_cursor(0)
+	local position = { file = vim.fn.expand('%:p'), line = cursor[1], col = cursor[2] }
+	local args = vim.fn['test#go#gotest#build_position']('nearest', position)
+
+	-- use "-dir" with "dispatch.vim" to populate the quickfix list with proper paths.
+	-- https://github.com/vim-test/vim-test/issues/617
+	vim.cmd.Dispatch('-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', args[1], '.')
+end, {
+	buffer = true,
+	desc = 'run the nearest test',
+})
