@@ -92,6 +92,10 @@ Plug('github.com/junegunn/fzf.vim')
 Plug('github.com/lifepillar/pgsql.vim', {
 	for_filetype = { 'sql' },
 })
+Plug('github.com/mrcjkb/rustaceanvim', {
+	-- use v5 tags: https://github.com/mrcjkb/rustaceanvim#inbox_tray-installation
+	tag = 'v5*',
+})
 Plug('github.com/neovim/nvim-lspconfig')
 Plug('github.com/nvim-lua/plenary.nvim')
 Plug('github.com/nvim-telescope/telescope.nvim', {
