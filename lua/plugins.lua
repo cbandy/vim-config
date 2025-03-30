@@ -15,15 +15,15 @@ vim.g.plug_url_format = 'https://git::@%s.git'
 
 local function Plug(short, ...)
 	local opts = vim.empty_dict()
-	for _, v in ipairs({...}) do opts = v end
+	for _, v in ipairs({ ... }) do opts = v end
 
 	-- The "do" and "for" options are Lua keywords and must be enclosed by brackets
 	-- in table constructors. This provides alternate names for those options.
 	--
 	-- https://github.com/junegunn/vim-plug#plug-options
-	opts['do']  = opts['after_update']; opts['after_update'] = nil
+	opts['do'] = opts['after_update']; opts['after_update'] = nil
 	opts['for'] = opts['for_filetype']; opts['for_filetype'] = nil
-	opts['on']  = opts['load_because']; opts['load_because'] = nil
+	opts['on'] = opts['load_because']; opts['load_because'] = nil
 
 	-- Empty "for" and "on" options indicate the plugin should not be loaded
 	-- at startup and not removed by PlugClean.
@@ -70,13 +70,13 @@ vim.call('plug#begin', vim.fs.joinpath(vim.fn.stdpath('data'), 'plugged'))
 
 
 Plug('github.com/airblade/vim-gitgutter', {
-	load_because = {'GitGutterEnable', 'GitGutterBufferEnable'},
+	load_because = { 'GitGutterEnable', 'GitGutterBufferEnable' },
 })
 Plug('github.com/chrisbra/unicode.vim', {
 	after_update = ':DownloadUnicode',
 })
 Plug('github.com/ctrlpvim/ctrlp.vim', {
-	load_because = {'CtrlP'},
+	load_because = { 'CtrlP' },
 })
 Plug('github.com/echasnovski/mini.base16')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
@@ -90,7 +90,7 @@ Plug('github.com/junegunn/fzf', {
 })
 Plug('github.com/junegunn/fzf.vim')
 Plug('github.com/lifepillar/pgsql.vim', {
-	for_filetype = {'sql'},
+	for_filetype = { 'sql' },
 })
 Plug('github.com/neovim/nvim-lspconfig')
 Plug('github.com/nvim-lua/plenary.nvim')
@@ -135,8 +135,15 @@ Plug('github.com/vim-test/vim-test', {
 
 --Plug('github.com/stevearc/conform.nvim')
 
-Plug('tpope.io/vim/abolish')
-Plug('tpope.io/vim/dadbod')
+Plug('tpope.io/vim/abolish', {
+	load_because = { 'Abolish', 'Subvert', 'S' },
+	globals = {
+		abolish_no_mappings = true,
+	},
+})
+Plug('tpope.io/vim/dadbod', {
+	load_because = { 'DB' },
+})
 Plug('tpope.io/vim/dispatch', {
 	load_because = { 'Dispatch' },
 	globals = {

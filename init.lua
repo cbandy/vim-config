@@ -295,17 +295,17 @@ for _, args in pairs({
 		if vim.call('FugitiveGitDir') ~= '' then
 			vim.cmd('GitGutterBufferEnable')
 		end
-	end},
+	end },
 
 	-- Indentation
-	{'FileType', {'cucumber', 'ruby', 'sql'}, { tabstop = 2, expandtab = true }},
-	{'FileType', {'toml', 'yaml', 'yaml.*'}, { tabstop = 2, expandtab = true }},
-	{'FileType', {'python'}, { tabstop = 4, expandtab = true }},
-	{'FileType', {'php', 'sh', 'sh.*'}, { tabstop = 4 }},
-	{'FileType', {'javascript'}, { tabstop = 2 }},
+	{ 'FileType', { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
+	{ 'FileType', { 'toml', 'yaml', 'yaml.*' },  { tabstop = 2, expandtab = true } },
+	{ 'FileType', { 'python' },                  { tabstop = 4, expandtab = true } },
+	{ 'FileType', { 'php', 'sh', 'sh.*' },       { tabstop = 4 } },
+	{ 'FileType', { 'javascript' },              { tabstop = 2 } },
 
 	-- Spelling
-	{'Syntax', {'rspec'}, { spell = true }},
+	{ 'Syntax',   { 'rspec' },                   { spell = true } },
 
 	-- Whitespace
 	{ 'ColorScheme', '*', [[
@@ -351,8 +351,9 @@ for _, args in pairs({
 	elseif type(args[3]) == 'function' then
 		opts['callback'] = args[3]
 	else
+		assert(type(args[3]) == 'table')
 		opts['callback'] = function()
-			for k,v in pairs(args[3]) do
+			for k, v in pairs(args[3]) do
 				vim.opt_local[k] = v
 			end
 		end
