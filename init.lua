@@ -281,16 +281,14 @@ local group = vim.api.nvim_create_augroup('mine', { clear = true })
 for _, args in pairs({
 	-- Use the ":help" command when editing files in my Vim directory.
 	-- Escape the path in the pattern by prepending "%" to non-alphanumeric characters.
-	{'FileType', {'lua', 'vim'}, function()
-		if string.match(
-			vim.fn.expand('%:p'),
-			'^' .. string.gsub(vim.fs.dirname(vim.env.MYVIMRC), '([^%w])', '%%%1')
-		) then
-			-- letters, numbers, apostrophe/quote, colon, hyphen, dot, underscore
-			vim.opt_local.iskeyword = '@,48-57,39,:,45,46,_'
+	{ 'FileType', { 'lua', 'vim' }, function()
+		if string.match(vim.fn.expand('%:p'), '^' .. string.gsub(vim_directory, '([^%w])', '%%%1'))
+		then
+			-- letters, numbers, colon, hyphen, dot, underscore
+			vim.opt_local.iskeyword = '@,48-57,:,45,46,_'
 			vim.opt_local.keywordprg = ':help'
 		end
-	end},
+	end },
 
 	{ { 'BufNewFile', 'BufReadPost' }, '*', function()
 		-- enable Git signs only when there is a Git directory
