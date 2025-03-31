@@ -78,10 +78,32 @@ Plug('github.com/chrisbra/unicode.vim', {
 Plug('github.com/ctrlpvim/ctrlp.vim', {
 	load_because = { 'CtrlP' },
 })
+Plug('github.com/dense-analysis/ale', {
+	tag = '*',
+	for_filetype = { 'sh' },
+	globals = {
+		-- only use linters that have been enabled
+		ale_disable_lsp = true,
+		ale_linters_explicit = true,
+		-- only run linters after file save
+		ale_lint_on_save = true,
+		ale_lint_on_insert_leave = false,
+		ale_lint_on_text_changed = 'never',
+		-- use the quickfix list
+		ale_set_loclist = false,
+		ale_set_quickfix = true,
+		-- https://github.com/dense-analysis/ale/blob/-/autoload/ale/fixers
+		ale_fixers = {},
+		-- https://github.com/dense-analysis/ale/blob/-/ale_linters
+		ale_linters = {
+			sh = { 'shell', 'shellcheck' },
+		},
+	},
+})
 Plug('github.com/echasnovski/mini.base16')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/fatih/vim-go', {
-	after_update = ':GoUpdateBinaries',
+	after_update = ':GoUpdateBinaries gopls',
 	for_filetype = { 'go' },
 })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
