@@ -167,7 +167,7 @@ Plug('tpope.io/vim/dispatch', {
 	load_because = { 'Dispatch' },
 	globals = {
 		dispatch_no_maps = true,
-		dispatch_tmux_height = 3,
+		dispatch_tmux_height = 5,
 		dispatch_compilers = {
 			['bundle exec'] = '',
 			['gotestsum'] = 'go',

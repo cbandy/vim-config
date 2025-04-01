@@ -225,6 +225,8 @@ vim.keymap.set('n', '<space>', 'za', {
 	desc = 'toggle the fold under the cursor [:help fold-commands]',
 	silent = true,
 })
+vim.keymap.set({ 'n', 'v' }, '<C-Up>', '<C-A>', { desc = 'increment' })
+vim.keymap.set({ 'n', 'v' }, '<C-Down>', '<C-X>', { desc = 'decrement' })
 vim.keymap.set('n', '<Leader>nt', require("nvim-tree.api").tree.toggle, {
 	desc = 'open or close the file explorer [:help nvim-tree]',
 })
