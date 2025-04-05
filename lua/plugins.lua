@@ -105,31 +105,6 @@ Plug('github.com/dense-analysis/ale', {
 })
 Plug('github.com/echasnovski/mini.base16')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
-Plug('github.com/fatih/vim-go', {
-	after_update = ':GoUpdateBinaries gopls',
-	for_filetype = { 'go' },
-	globals = {
-		go_code_completion_enabled = false,
-		go_def_mapping_enabled = false,
-		go_doc_keywordprg_enabled = true,
-		go_fillstruct_mode = 'gopls',
-		go_get_update = false,
-		go_jump_to_error = false,
-		go_textobj_enabled = false,
-
-		go_highlight_variable_declarations = true,
-
-		go_asmfmt_autosave = false,
-		go_fmt_autosave = false,
-		go_imports_autosave = false,
-		go_mod_fmt_autosave = false,
-		go_metalinter_autosave = false,
-
-		-- Start or use a shared gopls daemon.
-		-- lsp/gopls.lua
-		go_gopls_options = { '--remote=auto', '--remote.listen.timeout=15s' },
-	},
-})
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/junegunn/fzf', {
 	after_update = ':call fzf#install()',
@@ -167,12 +142,11 @@ Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
 	},
 })
 Plug('github.com/vim-test/vim-test', {
-	load_because = { 'TestFile', 'TestNearest' },
 	globals = {
 		['test#strategy'] = 'dispatch',
 		['test#echo_command'] = false,
 		['test#enabled_runners'] = {
-			'go#ginkgo', 'php#phpunit', 'python#pytest',
+			'go#gotest', 'go#ginkgo', 'php#phpunit', 'python#pytest',
 			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargotest',
 		},
 	},
