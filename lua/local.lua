@@ -1,6 +1,59 @@
 local vim = vim
 local M = {}
 
+---@param client vim.lsp.Client
+---@param bufnr integer
+function M.lsp_format_BufWritePre(client, bufnr)
+	-- Neovim sets a callback for "willSaveWaitUntil" already.
+	-- Let's assume clients that support it do the good stuff there.
+	if client:supports_method('textDocument/willSaveWaitUntil', bufnr) then return end
+
+	-- Apply any edits from the LSP client before writing the buffer to disk.
+	local group = ('local.lsp.b_%d_save'):format(bufnr)
+	local groupnr = vim.api.nvim_create_augroup(group, { clear = true })
+	local second = 1000
+
+	vim.api.nvim_create_autocmd('BufWritePre', {
+		group = groupnr,
+		buffer = bufnr,
+		callback = function()
+			-- Organize imports first.
+			if client:supports_method('textDocument/codeAction', bufnr) then
+				local params = {
+					textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+					position = { line = 0, character = 0 },
+					only = { 'source.organizeImports' },
+				}
+
+				local result, err = client:request_sync('textDocument/codeAction', params, 2 * second, bufnr)
+				if result and result.result then
+					for _, action in ipairs(result.result) do
+						if action.edit then
+							vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
+						end
+					end
+				elseif err then
+					vim.notify(('[LSP][%s] %s'):format(client.name, err), vim.log.levels.WARN)
+				end
+			end
+
+			-- Apply general formatting last.
+			if client:supports_method('textDocument/formatting', bufnr) then
+				local params = vim.tbl_extend('force', vim.lsp.util.make_formatting_params(), {
+					textDocument = { uri = vim.uri_from_bufnr(bufnr) },
+				})
+
+				local result, err = client:request_sync('textDocument/formatting', params, 2 * second, bufnr)
+				if result and result.result then
+					vim.lsp.util.apply_text_edits(result.result, bufnr, client.offset_encoding)
+				elseif err then
+					vim.notify(('[LSP][%s] %s'):format(client.name, err), vim.log.levels.WARN)
+				end
+			end
+		end,
+	})
+end
+
 -- This returns an iterator over all the lines in the files of &spellfile.
 function M.spellfile_lines(lang2)
 	return vim.iter(vim.split(vim.o.spellfile, ',', {

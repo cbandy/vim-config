@@ -78,29 +78,20 @@ vim.diagnostic.config({
 })
 
 -- [:help lsp-config]
-vim.lsp.config('*', {
+vim.lsp.config('*', { ---@type vim.lsp.Config
 	root_markers = { '.git' },
 
-	-- [:help vim.lsp.Client]
+	---@type fun(client: vim.lsp.Client, bufnr: integer): nil
 	on_attach = function(client, bufnr)
+		require('local').lsp_format_BufWritePre(client, bufnr)
+
 		if client:supports_method('textDocument/definition') then
-			local opts = { desc = 'vim.lsp.buf.definition()', buffer = bufnr }
+			local opts = { desc = 'vim.lsp.buf.definition()', buffer = bufnr } ---@type vim.keymap.set.Opts
 			vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
 			vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
 		end
 		if client:supports_method('textDocument/foldingRange') then
 			vim.wo[0][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
-		end
-		if client:supports_method('textDocument/formatting') and
-				not client:supports_method('textDocument/willSaveWaitUntil')
-		then
-			vim.api.nvim_create_autocmd('BufWritePre', {
-				group = vim.api.nvim_create_augroup('local.lsp', { clear = false }),
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.format({ bufnr = bufnr, id = client.id })
-				end,
-			})
 		end
 		if client:supports_method('textDocument/typeDefinition') then
 			vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, {
