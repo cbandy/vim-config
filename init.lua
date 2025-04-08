@@ -85,6 +85,7 @@ vim.lsp.config('*', { ---@type vim.lsp.Config
 vim.lsp.enable({
 	'ltexls', -- lsp/ltexls.lua
 	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
+	'yamlls', -- lsp/yamlls.lua
 })
 
 -- Explain Neovim workspace to LuaLS
