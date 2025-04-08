@@ -80,25 +80,7 @@ vim.diagnostic.config({
 -- [:help lsp-config]
 vim.lsp.config('*', { ---@type vim.lsp.Config
 	root_markers = { '.git' },
-
-	---@type fun(client: vim.lsp.Client, bufnr: integer): nil
-	on_attach = function(client, bufnr)
-		require('local').lsp_format_BufWritePre(client, bufnr)
-
-		if client:supports_method('textDocument/definition') then
-			local opts = { desc = 'vim.lsp.buf.definition()', buffer = bufnr } ---@type vim.keymap.set.Opts
-			vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-			vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
-		end
-		if client:supports_method('textDocument/foldingRange') then
-			vim.wo[0][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
-		end
-		if client:supports_method('textDocument/typeDefinition') then
-			vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition, {
-				desc = 'vim.lsp.buf.type_definition()', buffer = bufnr,
-			})
-		end
-	end,
+	on_attach = require('local').lsp_attach,
 })
 vim.lsp.enable({
 	'ltexls', -- lsp/ltexls.lua
@@ -270,7 +252,7 @@ vim.filetype.add({
 	},
 })
 
-local group = vim.api.nvim_create_augroup('mine', { clear = true })
+local group = vim.api.nvim_create_augroup('local', { clear = true })
 for _, args in pairs({
 	-- Use the ":help" command when editing files in my Vim directory.
 	-- Escape the path in the pattern by prepending "%" to non-alphanumeric characters.

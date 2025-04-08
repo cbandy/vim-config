@@ -3,10 +3,30 @@ local M = {}
 
 ---@param client vim.lsp.Client
 ---@param bufnr integer
-function M.lsp_format_BufWritePre(client, bufnr)
-	-- Neovim sets a callback for "willSaveWaitUntil" already.
-	-- Let's assume clients that support it do the good stuff there.
-	if client:supports_method('textDocument/willSaveWaitUntil', bufnr) then return end
+function M.lsp_attach(client, bufnr)
+	---@type vim.keymap.set.Opts
+	local opts = { buffer = bufnr }
+
+	if client:supports_method('textDocument/definition', bufnr) then
+		vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
+			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
+
+		vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition,
+			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
+	end
+
+	if client:supports_method('textDocument/foldingRange', bufnr) then
+		for _, winid in ipairs(vim.api.nvim_list_wins()) do
+			if vim.api.nvim_win_get_buf(winid) == bufnr then
+				vim.wo[winid].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+			end
+		end
+	end
+
+	if client:supports_method('textDocument/typeDefinition', bufnr) then
+		vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition,
+			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.type_definition()' }))
+	end
 
 	-- Apply any edits from the LSP client before writing the buffer to disk.
 	local group = ('local.lsp.b_%d_save'):format(bufnr)
@@ -17,6 +37,11 @@ function M.lsp_format_BufWritePre(client, bufnr)
 		group = groupnr,
 		buffer = bufnr,
 		callback = function()
+			-- Neovim sets a callback for "willSaveWaitUntil" already.
+			-- Assume clients that support it do the good stuff there.
+			-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_willSaveWaitUntil
+			if client:supports_method('textDocument/willSaveWaitUntil', bufnr) then return end
+
 			-- Organize imports first.
 			if client:supports_method('textDocument/codeAction', bufnr) then
 				local params = {
