@@ -4,11 +4,15 @@ AWS/=
 failover
 GCP/=
 GitHub/=
+GitLab/=
 GitOps/=
 Grafana/=
 GraphQL/=
+jq/=
 Kubernetes/=
 Kustomize/=
+LaTeX/=
+LTeX+/=
 Metabase/=
 namespace
 namespaces
