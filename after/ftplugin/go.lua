@@ -1,5 +1,6 @@
 local vim = vim
-local root = vim.fs.root(0, { 'go.mod', 'go.work' }) or vim.fn.getcwd()
+local module = vim.fs.root(0, { 'go.mod', 'go.work' })
+local project = vim.fs.root(0, '.git') or vim.fn.getcwd()
 
 vim.opt_local.tabstop = 2
 vim.opt_local.formatoptions:append({
@@ -15,17 +16,20 @@ require('local').treesitter_enable({ 'folds', highlighting = false })
 -- format on save, and use golangci-lint only if it is configured
 vim.b.ale_fix_on_save = true
 if
-		vim.uv.fs_stat(vim.fs.joinpath(root, '.golangci.yml')) or
-		vim.uv.fs_stat(vim.fs.joinpath(root, '.golangci.yaml')) or
-		vim.uv.fs_stat(vim.fs.joinpath(root, '.golangci.toml')) or
-		vim.uv.fs_stat(vim.fs.joinpath(root, '.golangci.json'))
+		vim.iter({ module, project, }):any(function(dir)
+			return vim.iter({
+				'.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json',
+			}):any(function(name)
+				return vim.uv.fs_stat(vim.fs.joinpath(dir, name))
+			end)
+		end)
 then
 	vim.b.ale_fixers = { 'goimports', 'golangci_lint' }
 	vim.b.ale_linters = { 'golangci_lint' }
 end
 
 vim.api.nvim_buf_create_user_command(0, 'GoTestSum', function(details)
-	local wd = details.bang and root or vim.fn.expand('%:p:h')
+	local wd = details.bang and (module or project) or vim.fn.expand('%:p:h')
 	vim.cmd.Dispatch('-dir=' .. wd, 'gotestsum', '--format-icons=default', '--watch', '--', '--count=1')
 end, {
 	bang = true, desc = 'have `gotestsum` watch a directory for changes',
