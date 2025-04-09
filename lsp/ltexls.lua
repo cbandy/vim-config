@@ -2,14 +2,18 @@
 
 local vim = vim
 
+---@type vim.lsp.Config
 return {
 	-- https://ltex-plus.github.io/ltex-plus/ltex-ls-plus/server-usage.html
 	cmd = { vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin', 'ltex-ls-plus') },
 	cmd_env = {},
 	filetypes = { 'asciidoc', 'gitcommit', 'html', 'markdown', 'mdx', 'rst', 'text', 'xhtml' },
 
+	-- https://ltex-plus.github.io/ltex-plus/supported-languages.html
 	get_language_id = function(_, filetype)
-		return require('local').vscode_language(filetype)
+		return ({
+			gitcommit = 'plaintext',
+		})[filetype] or require('local').vscode_language(filetype)
 	end,
 
 	-- https://ltex-plus.github.io/ltex-plus/settings.html
