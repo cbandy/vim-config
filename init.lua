@@ -259,88 +259,59 @@ vim.filetype.add({
 	},
 })
 
-local group = vim.api.nvim_create_augroup('local', { clear = true })
-for _, args in pairs({
-	-- Use the ":help" command when editing files in my Vim directory.
-	-- Escape the path in the pattern by prepending "%" to non-alphanumeric characters.
-	{ 'FileType', { 'lua', 'vim' }, function()
-		if string.match(vim.fn.expand('%:p'), '^' .. string.gsub(vim_directory, '([^%w])', '%%%1'))
-		then
-			-- letters, numbers, colon, hyphen, dot, underscore
-			vim.opt_local.iskeyword = '@,48-57,:,45,46,_'
-			vim.opt_local.keywordprg = ':help'
-		end
-	end },
-
-	{ { 'BufNewFile', 'BufReadPost' }, '*', function()
-		-- enable Git signs only when there is a Git directory
-		if vim.call('FugitiveGitDir') ~= '' then
-			vim.cmd('GitGutterBufferEnable')
-		end
-	end },
-
-	-- Indentation
-	{ 'FileType', { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
-	{ 'FileType', { 'toml', 'yaml', 'yaml.*' },  { tabstop = 2, expandtab = true } },
-	{ 'FileType', { 'python' },                  { tabstop = 4, expandtab = true } },
-	{ 'FileType', { 'php', 'sh', 'sh.*' },       { tabstop = 4 } },
-	{ 'FileType', { 'javascript' },              { tabstop = 2 } },
-
-	-- Spelling
-	{ 'Syntax',   { 'rspec' },                   { spell = true } },
-
-	-- Whitespace
-	{ 'ColorScheme', '*', [[
-		highlight default link ExtraWhitespace DiagnosticError
-	]] },
-	{ 'FileType', { 'sh', 'sh.*' }, [[
-		syntax match ExtraWhitespace /\s\+$/
-	]] },
-	{ 'FileType', { 'sql' }, [[
-		syntax match ExtraWhitespace /\s\+\%#\@<!$\| \+\ze\t/ containedin=ALL
-	]] },
-	{ 'FileType', { 'markdown', 'yaml', 'yaml.*' }, {
-		list = true, listchars = 'trail:·',
-	} },
-
-	-- Dispatch and Tests
-	--
-	-- The variable "l#" evaluates to the line number (range) invoked on :Dispatch.
-	-- See: https://www.github.com/tpope/vim-dispatch/commit/1e9bd0cdbe6975916fa4
-	{ 'FileType', 'sh', function()
-		if string.match(vim.fn.expand('%'), 'test[.]sh$') then
-			vim.b.dispatch = '%' ..
-					-- Prepend ./ to the filename.
-					[[:s#^#./#]] ..
-					-- Append the test function name when focused.
-					-- search()
-					--   "b" backward "n" without moving the cursor,
-					--   "W" stop at the beginning of the file, and
-					--   "c" allow a match on the current line
-					-- matchstr() to grab the entire function name
-					[[:s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/]]
-		end
-	end },
-	{ 'FileType', 'sql', function()
-		vim.b.dispatch = 'psql -Atqf %'
-	end },
-}) do
-	-- {{{
-	local opts = { group = group, pattern = args[2] }
-
-	if type(args[3]) == 'string' then
-		opts['command'] = args[3]:match([[^%s*(.-)%s*$]])
-	elseif type(args[3]) == 'function' then
-		opts['callback'] = args[3]
-	else
-		assert(type(args[3]) == 'table')
-		opts['callback'] = function()
-			for k, v in pairs(args[3]) do
-				vim.opt_local[k] = v
-			end
+apply(vim.api.nvim_create_augroup('local', { clear = true }), function(groupnr)
+	-- create an index of local options by filetype
+	local opts = {}
+	for _, short in ipairs({
+		{ { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
+		{ { 'toml', 'yaml' },            { tabstop = 2, expandtab = true } },
+		{ { 'python' },                  { tabstop = 4, expandtab = true } },
+		{ { 'javascript' },              { tabstop = 2 } },
+		{ { 'php', 'sh' },               { tabstop = 4 } },
+		{ { 'markdown', 'yaml' },        { list = true, listchars = 'trail:·' } },
+	}) do
+		for _, ft in ipairs(short[1]) do
+			opts[ft] = vim.tbl_extend('keep', opts[ft] or {}, short[2])
 		end
 	end
 
-	vim.api.nvim_create_autocmd(args[1], opts)
-	-- }}}
-end
+	vim.api.nvim_create_autocmd('FileType', {
+		group = groupnr,
+		callback = function(event)
+			for k, v in pairs(opts[event.match] or {}) do
+				vim.opt_local[k] = v
+			end
+
+			-- Dispatch and Tests
+			--
+			-- The variable "l#" evaluates to the line number (range) invoked on :Dispatch.
+			-- See: https://www.github.com/tpope/vim-dispatch/commit/1e9bd0cdbe6975916fa4
+			if event.match == 'sh' then
+				if string.match(event.file, 'test[.]sh$') then
+					vim.b.dispatch = '%' ..
+							-- Prepend ./ to the filename.
+							[[:s#^#./#]] ..
+							-- Append the test function name when focused.
+							-- search()
+							--   "b" backward "n" without moving the cursor,
+							--   "W" stop at the beginning of the file, and
+							--   "c" allow a match on the current line
+							-- matchstr() to grab the entire function name
+							[[:s/$/\=exists("l#") ? " -- ''".matchstr(getline(search("^test", "bcnW")), "test[a-zA-Z0-9_]*")."''" : ""/]]
+				end
+			elseif event.match == 'sql' then
+				vim.b.dispatch = 'psql -Atqf %'
+			end
+		end,
+	})
+
+	vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufReadPost' }, {
+		group = groupnr,
+		callback = function()
+			-- enable Git signs only when there is a Git directory
+			if vim.call('FugitiveGitDir') ~= '' then
+				vim.cmd('GitGutterBufferEnable')
+			end
+		end,
+	})
+end)
