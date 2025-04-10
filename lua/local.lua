@@ -43,6 +43,7 @@ function M.lsp_attach(client, bufnr)
 			if client:supports_method('textDocument/willSaveWaitUntil', bufnr) then return end
 
 			-- Organize imports first.
+			-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#codeActionKind
 			if client:supports_method('textDocument/codeAction', bufnr) then
 				local params = {
 					textDocument = { uri = vim.uri_from_bufnr(bufnr) },
@@ -63,6 +64,7 @@ function M.lsp_attach(client, bufnr)
 			end
 
 			-- Apply general formatting last.
+			-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_formatting
 			if client:supports_method('textDocument/formatting', bufnr) then
 				local params = vim.tbl_extend('force', vim.lsp.util.make_formatting_params(), {
 					textDocument = { uri = vim.uri_from_bufnr(bufnr) },

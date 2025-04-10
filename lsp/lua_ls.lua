@@ -2,6 +2,7 @@
 
 local vim = vim
 
+---@type vim.lsp.Config
 return {
 	cmd = { vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin', 'lua-language-server') },
 	filetypes = { 'lua' },

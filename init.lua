@@ -91,7 +91,10 @@ vim.lsp.enable({
 -- Explain Neovim workspace to LuaLS
 require('lazydev').setup({
 	debug = false,
-	integrations = { lspconfig = true },
+	integrations = { lspconfig = false },
+	library = {
+		{ path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+	},
 })
 
 -- Configure builtin and popular highlights using a Base16 palette.
