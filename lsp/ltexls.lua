@@ -5,7 +5,7 @@ local vim = vim
 ---@type vim.lsp.Config
 return {
 	-- https://ltex-plus.github.io/ltex-plus/ltex-ls-plus/server-usage.html
-	cmd = { vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin', 'ltex-ls-plus') },
+	cmd = { vim.env.LTEX_LS_PLUS or 'ltex-ls-plus' },
 	cmd_env = {},
 	filetypes = { 'asciidoc', 'gitcommit', 'html', 'markdown', 'mdx', 'rst', 'text', 'xhtml' },
 

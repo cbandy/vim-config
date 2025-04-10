@@ -87,6 +87,9 @@ vim.lsp.enable({
 	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
 	'yamlls', -- lsp/yamlls.lua
 })
+vim.env.PATH = vim.env.PATH
+		.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin')
+		.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
 
 -- Explain Neovim workspace to LuaLS
 require('lazydev').setup({
