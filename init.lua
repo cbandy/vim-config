@@ -271,7 +271,7 @@ apply(vim.api.nvim_create_augroup('local', { clear = true }), function(groupnr)
 	local opts = {}
 	for _, short in ipairs({
 		{ { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
-		{ { 'toml', 'yaml' },            { tabstop = 2, expandtab = true } },
+		{ { 'query', 'toml', 'yaml' },   { tabstop = 2, expandtab = true } },
 		{ { 'python' },                  { tabstop = 4, expandtab = true } },
 		{ { 'javascript' },              { tabstop = 2 } },
 		{ { 'php', 'sh' },               { tabstop = 4 } },
