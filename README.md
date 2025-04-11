@@ -5,7 +5,7 @@
 
 ## Installation
 
-```shell
+```sh
 cd
 git clone https://github.com/cbandy/vim-config.git .vim
 ln -s .vim/vimrc .vimrc

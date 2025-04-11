@@ -111,7 +111,14 @@ apply(require('local').palettes['tomorrow-night'], function(palette)
 	-- https://github.com/tinted-theming/base24/blob/-/styling.md
 	--
 	-- This sets it to Foreground, base05.
-	vim.api.nvim_set_hl(0, 'Identifier', { fg = palette.base05 })
+	--vim.api.nvim_set_hl(0, 'Identifier', { fg = palette.base05 })
+
+	-- These happen too often to be red.
+	vim.api.nvim_set_hl(0, '@property', { link = '@variable' })
+
+	-- Underline the text portion of the link, not the URL.
+	vim.api.nvim_set_hl(0, '@markup.link', {})
+	vim.api.nvim_set_hl(0, '@markup.link.label', { link = 'Underlined' })
 end)
 
 require('nvim-tree').setup({
@@ -278,6 +285,10 @@ apply(vim.api.nvim_create_augroup('local', { clear = true }), function(groupnr)
 	vim.api.nvim_create_autocmd('FileType', {
 		group = groupnr,
 		callback = function(event)
+			-- assume everything with a tree-sitter parser wants it for highlighting
+			local _, err = vim.treesitter.get_parser(event.buf, nil, { error = false })
+			if err == nil then vim.treesitter.start() end
+
 			for k, v in pairs(opts[event.match] or {}) do
 				vim.opt_local[k] = v
 			end
