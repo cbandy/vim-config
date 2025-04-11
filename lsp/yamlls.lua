@@ -21,7 +21,7 @@ return {
 				if groupnr == event.group
 						and vim.list_contains({ 'shiftwidth', 'tabstop' }, event.match)
 				then
-					local tabstop = vim.lsp.util.get_effective_tabstop(bufnr)
+					local tabstop = vim.lsp.util.get_effective_tabstop(event.buf)
 
 					client:notify('workspace/didChangeConfiguration', {
 						settings = vim.tbl_deep_extend('force', client.config.settings, {
@@ -34,6 +34,8 @@ return {
 	end,
 
 	settings = {
+		-- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
+		redhat = { telemetry = { enabled = false } },
 		yaml = {
 			-- the formatting provided is rather limited, so disable it
 			-- https://github.com/redhat-developer/yaml-language-server/issues/933
