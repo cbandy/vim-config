@@ -1,3 +1,4 @@
+;; extends
 ; https://neovim.io/doc/user/treesitter.html#_treesitter-language-injections
 
 ; interpret multiline values (block scalars) of key-value pairs as the language of the key
