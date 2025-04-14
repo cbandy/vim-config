@@ -72,6 +72,9 @@ vim.opt.updatetime = 1000 -- milliseconds
 vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
 vim.opt.wildignorecase = true
 
+-- show a border around popup windows [:help 'winborder']
+vim.opt.winborder = 'rounded'
+
 -- [:help vim.diagnostic.Opts]
 vim.diagnostic.config({
 	virtual_text = true,
