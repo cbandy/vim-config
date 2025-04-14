@@ -7,6 +7,18 @@ function M.lsp_attach(client, bufnr)
 	---@type vim.keymap.set.Opts
 	local opts = { buffer = bufnr }
 
+	-- https://gpanders.com/blog/whats-new-in-neovim-0-11#builtin-auto-completion
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_completion
+	if client:supports_method('textDocument/completion', bufnr) then
+		local trigger = client.server_capabilities.completionProvider.triggerCharacters
+
+		vim.opt_local.completeopt:append({ 'menuone', 'noselect', 'popup' })
+		vim.lsp.completion.enable(true, client.id, bufnr, {
+			autotrigger = trigger and #trigger > 0,
+		})
+	end
+
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_definition
 	if client:supports_method('textDocument/definition', bufnr) then
 		vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
 			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
@@ -15,6 +27,7 @@ function M.lsp_attach(client, bufnr)
 			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
 	end
 
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_foldingRange
 	if client:supports_method('textDocument/foldingRange', bufnr) then
 		for _, winid in ipairs(vim.api.nvim_list_wins()) do
 			if vim.api.nvim_win_get_buf(winid) == bufnr then
@@ -23,6 +36,7 @@ function M.lsp_attach(client, bufnr)
 		end
 	end
 
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_typeDefinition
 	if client:supports_method('textDocument/typeDefinition', bufnr) then
 		vim.keymap.set('n', 'gD', vim.lsp.buf.type_definition,
 			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.type_definition()' }))
