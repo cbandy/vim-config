@@ -75,8 +75,9 @@ vim.opt.wildignorecase = true
 -- show a border around popup windows [:help 'winborder']
 vim.opt.winborder = 'rounded'
 
--- [:help vim.diagnostic.Opts]
+---@type vim.diagnostic.Opts
 vim.diagnostic.config({
+	virtual_lines = { current_line = true },
 	virtual_text = true,
 })
 
