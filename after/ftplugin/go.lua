@@ -20,7 +20,8 @@ if
 			end)
 		end)
 then
-	vim.b.ale_fix_on_save = true
+	-- https://github.com/dense-analysis/ale/issues/4951
+	vim.b.ale_fix_on_save = false
 	vim.b.ale_fixers = { 'golangci_lint' }
 	vim.b.ale_linters = { 'golangci_lint' }
 end
