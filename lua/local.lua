@@ -99,6 +99,28 @@ function M.lsp_attach(client, bufnr)
 	})
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
+---@param settings table<string, boolean|string|number|table|nil>
+function M.lsp_notify_configuration(client, bufnr, settings)
+	-- The PULL model is newer, and Neovim responds to "workspace/configuration"
+	-- requests with values from [client.config.settings]. It also uses to these
+	-- values to initialize the server, but sometimes the shapes should differ.
+	-- In this model, the "workspace/didChangeConfiguration" notification is
+	-- a recommendation to the server to pull configuration again.
+	--
+	-- https://github.com/microsoft/language-server-protocol/issues/972
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#workspace_configuration
+
+	-- The PUSH model is older, but more consistently implemented. Notify the
+	-- server of any new configuration values.
+	--
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#workspace_didChangeConfiguration
+	if client:supports_method('workspace/didChangeConfiguration', bufnr) then
+		client:notify('workspace/didChangeConfiguration', { ['settings'] = settings })
+	end
+end
+
 -- This returns an iterator over all the lines in the files of &spellfile.
 function M.spellfile_lines(lang2)
 	return vim.iter(vim.split(vim.o.spellfile, ',', {
