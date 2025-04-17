@@ -20,10 +20,9 @@ function M.lsp_attach(client, bufnr)
 
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_definition
 	if client:supports_method('textDocument/definition', bufnr) then
-		vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
-			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
+		vim.bo[bufnr].tagfunc = 'v:lua.vim.lsp.tagfunc'
 
-		vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition,
+		vim.keymap.set('n', 'gd', vim.lsp.buf.definition,
 			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
 	end
 
