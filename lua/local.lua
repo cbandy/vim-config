@@ -50,8 +50,7 @@ function M.lsp_attach(client, bufnr)
 		group = groupnr,
 		buffer = bufnr,
 		callback = function()
-			-- Neovim sets a callback for "willSaveWaitUntil" already.
-			-- Assume clients that support it do the good stuff there.
+			-- Neovim handles "willSaveWaitUntil" already. Assume servers that support it do the good stuff there.
 			-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_willSaveWaitUntil
 			if client:supports_method('textDocument/willSaveWaitUntil', bufnr) then return end
 
@@ -64,9 +63,12 @@ function M.lsp_attach(client, bufnr)
 					only = { 'source.organizeImports' },
 				}
 
-				local result, err = client:request_sync('textDocument/codeAction', params, 2 * second, bufnr)
-				if result and result.result then
-					for _, action in ipairs(result.result) do
+				local response, err = client:request_sync('textDocument/codeAction', params, 2 * second, bufnr)
+				if response and response.result then
+					---@type lsp.CodeAction[]
+					local result = response.result
+
+					for _, action in ipairs(result) do
 						if action.edit then
 							vim.lsp.util.apply_workspace_edit(action.edit, client.offset_encoding)
 						end
@@ -83,9 +85,12 @@ function M.lsp_attach(client, bufnr)
 					textDocument = { uri = vim.uri_from_bufnr(bufnr) },
 				})
 
-				local result, err = client:request_sync('textDocument/formatting', params, 2 * second, bufnr)
-				if result and result.result then
-					vim.lsp.util.apply_text_edits(result.result, bufnr, client.offset_encoding)
+				local response, err = client:request_sync('textDocument/formatting', params, 2 * second, bufnr)
+				if response and response.result then
+					---@type lsp.TextEdit[]
+					local result = response.result
+
+					vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
 				elseif err then
 					vim.notify(('[LSP][%s] %s'):format(client.name, err), vim.log.levels.WARN)
 				end
