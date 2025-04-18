@@ -1,6 +1,8 @@
 -- https://pkg.go.dev/golang.org/x/tools/gopls#readme
 -- https://github.com/golang/tools/blob/-/gopls/doc/features
 
+local append = table.insert
+local join = table.concat
 local vim = vim
 
 -- Replace go_env with the results of `go env` the first time it is accessed.
@@ -12,13 +14,105 @@ setmetatable(go_env, {
 	end,
 })
 
+---@param flags string[] Go build flags
+---@return string[] # build flags other than -tags
+---@return string   # comma-separated build tags
+local function extract_build_tags(flags)
+	local tags = {}
+
+	flags = vim.iter(flags):map(function(flag)
+		local arg, matches = flag:gsub('^-tags[ =]', '', 1)
+		if matches > 0 then
+			for _, tag in ipairs(vim.split(arg, ',', { plain = true, trimempty = true })) do
+				tags[tag] = tag
+			end
+			return nil
+		else
+			return flag
+		end
+	end):totable()
+
+	local tagstr = vim.iter(pairs(tags)):fold('', function(out, k, _)
+		return out .. ',' .. k
+	end):sub(2)
+
+	return flags, tagstr
+end
+
+---@param client vim.lsp.Client
+---@param bufnr integer
+---@param replace boolean
+---@param flags string[] Go build flags
+local function update_build_flags(client, bufnr, replace, flags)
+	local settings = vim.tbl_get(client.config.settings, 'gopls') or {}
+
+	-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
+	if replace and #flags == 0 then
+		settings.buildFlags = nil
+	elseif replace then
+		settings.buildFlags = flags
+	else
+		local new = settings.buildFlags or {}
+		vim.list_extend(new, flags)
+		settings.buildFlags = new
+	end
+
+	-- when replacing or extending, tell the server to pull configuration
+	if replace or #flags > 0 then
+		client.config.settings = { gopls = settings }
+		require('local').lsp_notify_configuration(client, bufnr, {})
+	end
+end
+
 ---@type vim.lsp.Config
 return {
 	-- https://github.com/golang/tools/blob/-/gopls/doc/daemon.md
-	cmd = { 'gopls', '--remote=auto', '--remote.listen.timeout=15s' },
+	cmd = {
+		vim.env.GO or 'go', 'run', 'golang.org/x/tools/gopls@latest',
+		'--remote=auto', '--remote.listen.timeout=15s',
+	},
 	filetypes = { 'go', 'gomod', 'gotmpl', 'gowork' },
 
-	-- Indicate any LSP client is acceptable for files in GOMODCACHE.
+	offset_encoding = 'utf-8',
+	on_attach = function(client, bufnr)
+		require('local').lsp_attach(client, bufnr)
+
+		-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
+		vim.api.nvim_buf_create_user_command(bufnr, 'GoBuildFlags', function(details)
+			update_build_flags(client, bufnr, details.bang, details.fargs)
+		end, {
+			bang = true, nargs = '*', desc = 'view, add, or replace Go build flags',
+		})
+
+		-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
+		vim.api.nvim_buf_create_user_command(bufnr, 'GoBuildTags', function(details)
+			local flags = vim.tbl_get(client.config.settings, 'gopls', 'buildFlags') or {}
+			local tags = join(details.fargs, ',')
+
+			if details.bang and #details.args == 0 then
+				flags, _ = extract_build_tags(flags)
+				tags = ''
+			elseif details.bang then
+				flags, _ = extract_build_tags(flags)
+				append(flags, '-tags=' .. tags)
+			elseif #details.args > 0 then
+				append(flags, '-tags=' .. tags)
+				flags, tags = extract_build_tags(flags)
+				append(flags, '-tags=' .. tags)
+			end
+
+			-- update when replacing or extending
+			if details.bang or #details.args > 0 then
+				update_build_flags(client, bufnr, true, flags)
+			end
+
+			vim.notify(('Tags: %q'):format(tags), vim.log.levels.INFO)
+		end, {
+			bang = true, nargs = '*', desc = 'view, add, or replace Go build tags',
+		})
+	end,
+
+	-- Indicate any gopls is acceptable for files in GOMODCACHE.
 	-- It would be nicer to use "reuse_client" maybe, but the default implementation is inaccessible.
 	-- https://github.com/neovim/nvim-lspconfig/issues/804
 	-- https://github.com/neovim/nvim-lspconfig/pull/2661
@@ -53,8 +147,13 @@ return {
 				parameterNames = true,
 			},
 
+			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#formatting
 			gofumpt = true,
-			symbolScope = 'workspace',
+
+			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#ui
+			semanticTokens = true,
+
+			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#completion
 			usePlaceholders = true,
 		}
 	},
