@@ -1,8 +1,7 @@
 local vim = vim
 local M = {}
 
----@param client vim.lsp.Client
----@param bufnr integer
+---@type vim.lsp.client.on_attach_cb
 function M.lsp_attach(client, bufnr)
 	---@type vim.keymap.set.Opts
 	local opts = { buffer = bufnr }
@@ -121,7 +120,7 @@ function M.lsp_notify_configuration(client, bufnr, settings)
 	end
 end
 
--- This returns an iterator over all the lines in the files of &spellfile.
+---@return Iter # all the lines in the files of &spellfile
 function M.spellfile_lines(lang2)
 	return vim.iter(vim.split(vim.o.spellfile, ',', {
 		plain = true, trimempty = true,
@@ -133,7 +132,7 @@ function M.spellfile_lines(lang2)
 	end):flatten()
 end
 
--- This returns an iterator over all the good words in the files of &spellfile.
+---@return Iter # all the good words in the files of &spellfile
 function M.spellfile_good_words(lang2)
 	return M.spellfile_lines(lang2):map(function(line)
 		if line:match('^[^#/]') then
@@ -173,6 +172,8 @@ end
 
 -- This converts a Vim filetype to a VSCode language identifier.
 -- https://code.visualstudio.com/docs/languages/identifiers
+---@param filetype string Vim filetype
+---@return string # VSCode language identifier
 function M.vscode_language(filetype)
 	return ({
 		gitcommit = 'git-commit',

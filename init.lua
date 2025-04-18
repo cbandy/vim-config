@@ -81,21 +81,23 @@ vim.diagnostic.config({
 	virtual_text = true,
 })
 
--- [:help lsp-config]
-vim.lsp.config('*', { ---@type vim.lsp.Config
-	root_markers = { '.git' },
-	on_attach = require('local').lsp_attach,
-})
-vim.lsp.enable({
-	'gopls', -- lsp/gopls.lua
-	'jqls',  -- lsp/jqls.lua
-	'ltexls', -- lsp/ltexls.lua
-	'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
-	'yamlls', -- lsp/yamlls.lua
-})
-vim.env.PATH = vim.env.PATH
-		.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin')
-		.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
+---@param vim_lsp_extend fun(name: string, config: vim.lsp.Config) # add LSP configuration [:help lsp-config]
+apply(vim.lsp.config, function(vim_lsp_extend)
+	vim_lsp_extend('*', {
+		root_markers = { '.git' },
+		on_attach = require('local').lsp_attach,
+	})
+	vim.lsp.enable({
+		'gopls', -- lsp/gopls.lua
+		'jqls', -- lsp/jqls.lua
+		'ltexls', -- lsp/ltexls.lua
+		'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
+		'yamlls', -- lsp/yamlls.lua
+	})
+	vim.env.PATH = vim.env.PATH
+			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin')
+			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
+end)
 
 -- Explain Neovim workspace to LuaLS
 require('lazydev').setup({
