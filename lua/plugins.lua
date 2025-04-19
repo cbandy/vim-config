@@ -75,9 +75,6 @@ Plug('github.com/airblade/vim-gitgutter', {
 Plug('github.com/chrisbra/unicode.vim', {
 	after_update = ':DownloadUnicode',
 })
-Plug('github.com/ctrlpvim/ctrlp.vim', {
-	load_because = { 'CtrlP' },
-})
 Plug('github.com/dense-analysis/ale', {
 	tag = '*',
 	for_filetype = { 'go', 'gomod', 'sh' },
@@ -104,24 +101,14 @@ Plug('github.com/dense-analysis/ale', {
 	},
 })
 Plug('github.com/echasnovski/mini.base16')
+Plug('github.com/echasnovski/mini.icons')
+Plug('github.com/echasnovski/mini.pick')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
-Plug('github.com/junegunn/fzf', {
-	after_update = ':call fzf#install()',
-})
-Plug('github.com/junegunn/fzf.vim')
 Plug('github.com/lifepillar/pgsql.vim', {
 	for_filetype = { 'sql' },
 })
 Plug('github.com/neovim/nvim-lspconfig')
-Plug('github.com/nvim-lua/plenary.nvim')
-Plug('github.com/nvim-telescope/telescope.nvim', {
-	-- use release branch: https://github.com/nvim-telescope/telescope.nvim#installation
-	branch = '0.1.x',
-	requires = {
-		'github.com/nvim-lua/plenary.nvim',
-	},
-})
 Plug('github.com/nvim-tree/nvim-tree.lua', { tag = '*' })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
@@ -132,13 +119,6 @@ Plug('github.com/nvim-treesitter/nvim-treesitter', {
 Plug('github.com/nvim-treesitter/nvim-treesitter-context', {
 	requires = {
 		'github.com/nvim-treesitter/nvim-treesitter',
-	},
-})
-Plug('github.com/nvim-treesitter/nvim-treesitter-textobjects', {
-	-- Stability matches nvim-treesitter.
-	branch = vim.fn.has('nvim-0.11') > 0 and 'main' or 'master',
-	requires = {
-		vim.fn.has('nvim-0.11') <= 0 and 'github.com/nvim-treesitter/nvim-treesitter' or nil,
 	},
 })
 Plug('github.com/vim-test/vim-test', {

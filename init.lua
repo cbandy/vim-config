@@ -130,6 +130,9 @@ apply(require('local').palettes['tomorrow-night'], function(palette)
 	vim.api.nvim_set_hl(0, '@string.special.url.gomod', {})
 end)
 
+require('mini.icons').setup({ style = 'ascii' })
+require('mini.pick').setup()
+
 require('nvim-tree').setup({
 	diagnostics = {
 		enable = true,
@@ -151,17 +154,6 @@ require('nvim-tree').setup({
 				git = { deleted = '⊟', staged = '🗹', unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
 			},
 		},
-	},
-})
-
-require("telescope").setup({ -- [:help telescope.setup]
-	defaults = {
-		layout_strategy = 'vertical',
-		path_display = { shorten = 5 },
-		sorting_strategy = 'ascending',
-	},
-	mappings = {
-		n = { ['q'] = require("telescope.actions").close },
 	},
 })
 
