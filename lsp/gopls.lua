@@ -32,11 +32,11 @@ local function extract_build_tags(flags)
 		end
 	end):totable()
 
-	local tagstr = vim.iter(pairs(tags)):fold('', function(out, k, _)
-		return out .. ',' .. k
-	end):sub(2)
+	tags = vim.iter(pairs(tags)):fold({}, function(out, k, _)
+		table.insert(out, k); return out;
+	end)
 
-	return flags, tagstr
+	return flags, join(tags, ',')
 end
 
 ---@param client vim.lsp.Client
@@ -148,7 +148,7 @@ return {
 			},
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#formatting
-			gofumpt = true,
+			gofumpt = false,
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#ui
 			semanticTokens = true,
