@@ -1,4 +1,4 @@
-local vim = vim
+local vim, io = vim, io
 local M = {}
 
 ---@type vim.lsp.client.on_attach_cb

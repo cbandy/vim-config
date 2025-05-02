@@ -1,4 +1,4 @@
-local vim = vim
+local vim, io = vim, io
 local module = vim.fs.root(0, { 'go.mod', 'go.work' })
 local project = vim.fs.root(0, '.git') or vim.fn.getcwd()
 
@@ -10,18 +10,27 @@ vim.opt_local.formatoptions:append({
 	o = true,
 })
 
+-- find a golangci-lint config file for this buffer, if any, and read its version
+-- https://golangci-lint.run/usage/configuration#config-file
+local _, golangci_version = pcall(function()
+	for _, dir in ipairs({ module, project }) do
+		for _, name in ipairs({
+			'.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json',
+		}) do
+			local path = vim.fs.joinpath(dir, name)
+			if nil ~= vim.uv.fs_stat(path) then
+				return vim.iter(io.lines(path)):map(function(line)
+					return line:match('version[":=%s].+')
+				end):next() or '1'
+			end
+		end
+	end
+end)
+
 -- gopls formats on save, but also use golangci-lint when it is configured
-if
-		vim.iter({ module, project, }):any(function(dir)
-			return vim.iter({
-				'.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json',
-			}):any(function(name)
-				return nil ~= vim.uv.fs_stat(vim.fs.joinpath(dir, name))
-			end)
-		end)
-then
+if golangci_version then
 	-- https://github.com/dense-analysis/ale/issues/4951
-	vim.b.ale_fix_on_save = false
+	vim.b.ale_fix_on_save = false and ('2' == golangci_version:match('%d+'))
 	vim.b.ale_fixers = { 'golangci_lint' }
 	vim.b.ale_linters = { 'golangci_lint' }
 end
