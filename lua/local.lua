@@ -158,7 +158,7 @@ function M.treesitter_setup(config)
 	require('nvim-treesitter').setup(config['nvim-treesitter'])
 	require('treesitter-context').setup(config['nvim-treesitter-context'])
 
-	-- https://github.com/nvim-treesitter/nvim-treesitter/tree/main#adding-parsers
+	-- https://github.com/nvim-treesitter/nvim-treesitter/tree/main#adding-custom-languages
 	vim.api.nvim_create_autocmd('User', {
 		pattern = 'TSUpdate',
 		callback = function()
@@ -168,6 +168,8 @@ function M.treesitter_setup(config)
 			end
 		end
 	})
+
+	require('nvim-treesitter').install(config.languages)
 end
 
 -- This converts a Vim filetype to a VSCode language identifier.

@@ -158,22 +158,21 @@ require('nvim-tree').setup({
 })
 
 require('local').treesitter_setup({
-	['nvim-treesitter'] = {
-		ensure_install = {
-			-- config and data
-			'csv', 'json', 'pem', 'properties', 'psv', 'toml', 'tsv', 'xml', 'yaml',
-			-- editing
-			'diff', 'editorconfig', 'vim', 'vimdoc',
-			-- interpreted
-			'bash', 'dockerfile', 'helm', 'javascript', 'lua', 'luap', 'perl',
-			'php_only', 'python', 'ruby', 'sql', 'vhs',
-			-- compiled
-			'c', 'cpp', 'go', 'gomod', 'rust', 'typescript',
-			-- presentation
-			'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html',
-			'markdown', 'markdown_inline', 'rst', 'tsx',
-		},
+	languages = {
+		-- config and data
+		'csv', 'json', 'pem', 'properties', 'psv', 'toml', 'tsv', 'xml', 'yaml',
+		-- editing
+		'diff', 'editorconfig', 'vim', 'vimdoc',
+		-- interpreted
+		'bash', 'dockerfile', 'helm', 'javascript', 'lua', 'luap', 'perl',
+		'php_only', 'python', 'ruby', 'sql', 'vhs',
+		-- compiled
+		'c', 'cpp', 'go', 'gomod', 'rust', 'typescript',
+		-- presentation
+		'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html',
+		'markdown', 'markdown_inline', 'rst', 'tsx',
 	},
+	['nvim-treesitter'] = {},
 	['nvim-treesitter-context'] = {
 		mode = 'topline',
 		multiline_threshold = 4,
@@ -182,27 +181,29 @@ require('local').treesitter_setup({
 		asciidoc = {
 			install_info = {
 				url = 'https://github.com/cathaysia/tree-sitter-asciidoc',
+				branch = 'master',
 				location = 'tree-sitter-asciidoc',
-				files = { 'src/parser.c', 'src/scanner.c' },
+				queries = 'tree-sitter-asciidoc/queries',
 			},
 		},
 		asciidoc_inline = {
 			install_info = {
 				url = 'https://github.com/cathaysia/tree-sitter-asciidoc',
+				branch = 'master',
 				location = 'tree-sitter-asciidoc_inline',
-				files = { 'src/parser.c', 'src/scanner.c' },
+				queries = 'tree-sitter-asciidoc_inline/queries',
 			},
 		},
 		jq = {
 			install_info = {
 				url = 'https://github.com/nverno/tree-sitter-jq',
-				files = { 'src/parser.c' },
+				branch = 'master',
+				queries = 'queries',
 			},
 		},
 		make = {
 			install_info = {
 				url = 'https://github.com/tree-sitter-grammars/tree-sitter-make',
-				files = { 'src/parser.c' },
 			},
 		},
 	},
