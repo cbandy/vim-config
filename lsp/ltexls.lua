@@ -6,7 +6,10 @@ local vim = vim
 return {
 	-- https://ltex-plus.github.io/ltex-plus/ltex-ls-plus/server-usage.html
 	cmd = { vim.env.LTEX_LS_PLUS or 'ltex-ls-plus' },
-	cmd_env = {},
+	-- Disable an AArch64 extension due to a bug in Java and macOS.
+	-- https://bugs.openjdk.org/browse/JDK-8345296
+	-- https://stackoverflow.com/a/79461774
+	cmd_env = { JAVA_OPTS = '-XX:UseSVE=0' },
 	filetypes = { 'asciidoc', 'gitcommit', 'html', 'markdown', 'mdx', 'rst', 'text', 'xhtml' },
 
 	-- https://ltex-plus.github.io/ltex-plus/supported-languages.html
