@@ -103,7 +103,7 @@ end
 ---@param settings table<string, boolean|string|number|table|nil>
 function M.lsp_notify_configuration(client, bufnr, settings)
 	-- The PULL model is newer, and Neovim responds to "workspace/configuration"
-	-- requests with values from [client.config.settings]. It also uses to these
+	-- requests with values from [client.config.settings]. It also uses these
 	-- values to initialize the server, but sometimes the shapes should differ.
 	-- In this model, the "workspace/didChangeConfiguration" notification is
 	-- a recommendation to the server to pull configuration again.
@@ -111,7 +111,7 @@ function M.lsp_notify_configuration(client, bufnr, settings)
 	-- https://github.com/microsoft/language-server-protocol/issues/972
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#workspace_configuration
 
-	-- The PUSH model is older, but more consistently implemented. Notify the
+	-- The PUSH model is older but more consistently implemented. Notify the
 	-- server of any new configuration values.
 	--
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#workspace_didChangeConfiguration
