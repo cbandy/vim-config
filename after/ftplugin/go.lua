@@ -32,7 +32,7 @@ if golangci_version then
 	-- https://github.com/dense-analysis/ale/issues/4951
 	vim.b.ale_fix_on_save = false and ('2' == golangci_version:match('%d+'))
 	vim.b.ale_fixers = { 'golangci_lint' }
-	vim.b.ale_linters = { 'golangci_lint' }
+	vim.b.ale_linters = { 'golangci-lint' }
 end
 
 vim.api.nvim_buf_create_user_command(0, 'GoTestSum', function(details)

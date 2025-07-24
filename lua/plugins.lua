@@ -76,7 +76,7 @@ Plug('github.com/chrisbra/unicode.vim', {
 	after_update = ':DownloadUnicode',
 })
 Plug('github.com/dense-analysis/ale', {
-	tag = '*',
+	commit = '067e74fee8b404d2ab36804943b8dd68c7a38327',
 	for_filetype = { 'go', 'gomod', 'sh' },
 	globals = {
 		-- only use linters that have been enabled
