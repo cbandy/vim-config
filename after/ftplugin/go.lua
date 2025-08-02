@@ -37,7 +37,9 @@ end
 
 vim.api.nvim_buf_create_user_command(0, 'GoTestSum', function(details)
 	local wd = details.bang and (module or project) or vim.fn.expand('%:p:h')
-	vim.cmd.Dispatch('-dir=' .. wd, 'gotestsum', '--format-icons=default', '--watch', '--', '--count=1')
+	local color = '--no-color=' .. tostring(not vim.o.termguicolors)
+	vim.cmd.Dispatch('-dir=' .. wd, vim.env.GO or 'go', 'run',
+		'gotest.tools/gotestsum@latest', color, '--watch', '--watch-chdir', '--', '--count=1')
 end, {
 	bang = true, desc = 'have `gotestsum` watch a directory for changes',
 })
