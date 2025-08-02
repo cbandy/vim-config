@@ -138,6 +138,7 @@ Plug('tpope.io/vim/abolish', {
 		abolish_no_mappings = true,
 	},
 })
+Plug('tpope.io/vim/commentary')
 Plug('tpope.io/vim/dadbod', {
 	load_because = { 'DB' },
 })
@@ -145,7 +146,7 @@ Plug('tpope.io/vim/dispatch', {
 	load_because = { 'Dispatch' },
 	globals = {
 		dispatch_no_maps = true,
-		dispatch_tmux_height = 5,
+		dispatch_tmux_height = '25%',
 		dispatch_compilers = {
 			['bundle exec'] = '',
 			['gotestsum'] = 'go',
