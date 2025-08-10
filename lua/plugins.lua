@@ -98,6 +98,10 @@ Plug('github.com/dense-analysis/ale', {
 		ale_linters = {
 			sh = { 'shell', 'shellcheck' },
 		},
+		-- use ShellCheck's algorithm for detecting a file's dialect
+		-- https://github.com/dense-analysis/ale/blob/-/autoload/ale/handlers/shellcheck.vim
+		-- https://github.com/koalaman/shellcheck/wiki/Directive
+		ale_sh_shellcheck_dialect = '',
 	},
 })
 Plug('github.com/echasnovski/mini.base16')
