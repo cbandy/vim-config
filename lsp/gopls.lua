@@ -152,6 +152,8 @@ return {
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#ui
 			semanticTokens = true,
+			-- use the tree-sitter colors for "return" and constants
+			semanticTokenTypes = { keyword = false, variable = false },
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#completion
 			usePlaceholders = true,
