@@ -109,6 +109,7 @@ Plug('github.com/echasnovski/mini.icons')
 Plug('github.com/echasnovski/mini.pick')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
+Plug('github.com/icholy/lsplinks.nvim')
 Plug('github.com/lifepillar/pgsql.vim', {
 	for_filetype = { 'sql' },
 })

@@ -110,6 +110,10 @@ require('lazydev').setup({
 	},
 })
 
+require('lsplinks').setup({
+	highlight = false,
+})
+
 -- Configure builtin and popular highlights using a Base16 palette.
 -- (Not technically a colorscheme.)
 apply(require('local').palettes['tomorrow-night'], function(palette)
@@ -227,6 +231,7 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
+vim.keymap.set("n", 'gx', require('lsplinks').gx)
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be
