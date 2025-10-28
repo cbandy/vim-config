@@ -88,11 +88,13 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 		on_attach = require('local').lsp_attach,
 	})
 	vim.lsp.enable({
-		'gopls', -- lsp/gopls.lua
-		'jqls', -- lsp/jqls.lua
-		'ltexls', -- lsp/ltexls.lua
-		'lua_ls', -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
-		'yamlls', -- lsp/yamlls.lua
+		'gopls',     -- lsp/gopls.lua
+		'jqls',      -- lsp/jqls.lua
+		'ltexls',    -- lsp/ltexls.lua
+		'lua_ls',    -- lsp/lua_ls.lua -- 'lazydev' requires this to be named 'lua_ls'
+		'ruby_sorbet', -- lsp/ruby_sorbet.lua
+		'ruby_stdrb', -- lsp/ruby_stdrb.lua
+		'yamlls',    -- lsp/yamlls.lua
 	})
 	vim.env.PATH = vim.env.PATH
 			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin')
