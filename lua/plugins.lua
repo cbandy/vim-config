@@ -163,6 +163,11 @@ Plug('tpope.io/vim/fugitive')
 Plug('tpope.io/vim/projectionist', {
 	globals = {
 		projectionist_heuristics = {
+			['*.control'] = {
+				['**/expected/*.out'] = { type = 'out', alternate = { '{dirname}/specs/{basename}.spec', '{dirname}/sql/{basename}.sql' } },
+				['**/specs/*.spec'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
+				['**/sql/*.sql'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
+			},
 			['go.mod|go.work'] = {
 				['*.go'] = { alternate = '{}_test.go', type = 'source' },
 				['*_test.go'] = { alternate = '{}.go', type = 'test' },
