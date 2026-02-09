@@ -1,6 +1,7 @@
 Ansible/=
 API/=
 AWS/=
+connascent
 failover
 GCP/=
 GitHub/=
@@ -16,6 +17,7 @@ LTeX+/=
 Metabase/=
 namespace
 namespaces
+OpenAPI/=
 OpenShift/=
 OpenTelemetry/=
 Patroni/=
