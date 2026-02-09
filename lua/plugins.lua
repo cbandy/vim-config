@@ -167,6 +167,10 @@ Plug('tpope.io/vim/projectionist', {
 				['**/specs/*.spec'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
 				['**/sql/*.sql'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
 			},
+			['Gemfile'] = {
+				['app/*.rb'] = { alternate = 'spec/{}_spec.rb', type = 'source' },
+				['lib/*.rb'] = { alternate = 'spec/{}_spec.rb', type = 'source' },
+			},
 			['go.mod|go.work'] = {
 				['*.sql'] = { alternate = '{}.sql.go', type = 'source' },
 				['*.sql.go'] = { alternate = '{}.sql', type = 'source' },
