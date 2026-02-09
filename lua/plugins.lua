@@ -168,6 +168,8 @@ Plug('tpope.io/vim/projectionist', {
 				['**/sql/*.sql'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
 			},
 			['go.mod|go.work'] = {
+				['*.sql'] = { alternate = '{}.sql.go', type = 'source' },
+				['*.sql.go'] = { alternate = '{}.sql', type = 'source' },
 				['*.go'] = { alternate = '{}_test.go', type = 'source' },
 				['*_test.go'] = { alternate = '{}.go', type = 'test' },
 			},
