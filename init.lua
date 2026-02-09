@@ -72,7 +72,8 @@ vim.opt.updatetime = 1000 -- milliseconds
 vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
 vim.opt.wildignorecase = true
 
--- show a border around popup windows [:help 'winborder']
+-- show a border around popup menus and windows [:help 'winborder']
+--vim.opt.pumborder = 'rounded' -- Neovim 0.12 -- https://github.com/neovim/neovim/pull/25541
 vim.opt.winborder = 'rounded'
 
 ---@type vim.diagnostic.Opts
@@ -152,12 +153,12 @@ require('nvim-tree').setup({
 		indent_markers = { enable = true },
 		icons = {
 			show = { file = false, folder = false, modified = false },
-			symlink_arrow = ' 🡪  ',
+			symlink_arrow = (vim.fn.has('mac') and ' ➜ ' or ' 🡪 '),
 			git_placement = 'after',
 			glyphs = {
-				bookmark = '🞉',
+				bookmark = '⭘',
 				folder = { arrow_closed = '⏵', arrow_open = '◼' },
-				git = { deleted = '⊟', staged = '🗹', unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
+				git = { deleted = '⊟', staged = (vim.fn.has('mac') and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
 			},
 		},
 	},

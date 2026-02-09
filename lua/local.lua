@@ -25,6 +25,7 @@ function M.lsp_attach(client, bufnr)
 			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.buf.definition()' }))
 	end
 
+	-- NOTE: This setting takes effect when 'fdm=expr' [:help foldmethod]
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_foldingRange
 	if client:supports_method('textDocument/foldingRange', bufnr) then
 		for _, winid in ipairs(vim.api.nvim_list_wins()) do
