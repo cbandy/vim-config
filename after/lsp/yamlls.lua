@@ -24,7 +24,7 @@ end
 
 ---@type vim.lsp.Config
 return {
-	cmd = { 'yaml-language-server', '--stdio' },
+	cmd = { 'nice', 'yaml-language-server', '--stdio' },
 	filetypes = { 'yaml' },
 
 	on_attach = function(client, bufnr)

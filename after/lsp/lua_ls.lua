@@ -4,7 +4,7 @@ local vim = vim
 
 ---@type vim.lsp.Config
 return {
-	cmd = { vim.env.LUA_LS or 'lua-language-server' },
+	cmd = { 'nice', vim.env.LUA_LS or 'lua-language-server' },
 	filetypes = { 'lua' },
 
 	-- https://luals.github.io/wiki/settings

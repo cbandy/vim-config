@@ -5,7 +5,7 @@ local vim = vim
 ---@type vim.lsp.Config
 return {
 	-- https://ltex-plus.github.io/ltex-plus/ltex-ls-plus/server-usage.html
-	cmd = { vim.env.LTEX_LS_PLUS or 'ltex-ls-plus' },
+	cmd = { 'nice', vim.env.LTEX_LS_PLUS or 'ltex-ls-plus' },
 	-- Disable an AArch64 extension due to a bug in Java and macOS.
 	-- https://bugs.openjdk.org/browse/JDK-8345296
 	-- https://stackoverflow.com/a/79461774

@@ -68,7 +68,7 @@ end
 return {
 	-- https://github.com/golang/tools/blob/-/gopls/doc/daemon.md
 	cmd = {
-		vim.env.GO or 'go', 'run', 'golang.org/x/tools/gopls@latest',
+		'nice', vim.env.GO or 'go', 'run', 'golang.org/x/tools/gopls@latest',
 		'--remote=auto', '--remote.listen.timeout=15s',
 	},
 	filetypes = { 'go', 'gomod', 'gotmpl', 'gowork' },

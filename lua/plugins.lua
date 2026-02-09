@@ -113,7 +113,6 @@ Plug('github.com/icholy/lsplinks.nvim')
 Plug('github.com/lifepillar/pgsql.vim', {
 	for_filetype = { 'sql' },
 })
-Plug('github.com/neovim/nvim-lspconfig')
 Plug('github.com/nvim-tree/nvim-tree.lua', { tag = '*' })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
