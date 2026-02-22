@@ -131,7 +131,7 @@ Plug('github.com/vim-test/vim-test', {
 		['test#echo_command'] = false,
 		['test#enabled_runners'] = {
 			'go#gotest', 'go#ginkgo', 'php#phpunit', 'python#pytest',
-			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargotest',
+			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargonextest',
 		},
 	},
 })
