@@ -5,7 +5,7 @@
 local function apply(...)
 	local args = { ... }; local fn = table.remove(args); fn(unpack(args))
 end
-local vim = vim
+local jit, vim = jit, vim
 local vim_directory = vim.fs.dirname(vim.env.MYVIMRC)
 
 -- Disable some built-in features and plugins first.
@@ -154,12 +154,12 @@ require('nvim-tree').setup({
 		indent_markers = { enable = true },
 		icons = {
 			show = { file = false, folder = false, modified = false },
-			symlink_arrow = (vim.fn.has('mac') and ' ➜ ' or ' 🡪 '),
+			symlink_arrow = (jit.os == 'OSX' and ' ➜ ' or ' ➔  '),
 			git_placement = 'after',
 			glyphs = {
 				bookmark = '⭘',
 				folder = { arrow_closed = '⏵', arrow_open = '◼' },
-				git = { deleted = '⊟', staged = (vim.fn.has('mac') and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
+				git = { deleted = '⊖ ', staged = (jit.os == 'OSX' and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
 			},
 		},
 	},
