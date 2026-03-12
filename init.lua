@@ -2,9 +2,7 @@
 
 -- {{{ Imports --
 
-local function apply(...)
-	local args = { ... }; local fn = table.remove(args); fn(unpack(args))
-end
+local apply = require('local').apply
 local jit, vim = jit, vim
 local vim_directory = vim.fs.dirname(vim.env.MYVIMRC)
 

@@ -1,6 +1,5 @@
 local vim, io = vim, io
-local module = vim.fs.root(0, { 'go.mod', 'go.work' })
-local project = vim.fs.root(0, '.git') or vim.fn.getcwd()
+local go = require('local').go
 
 vim.opt_local.tabstop = 2
 vim.opt_local.formatoptions:append({
@@ -13,7 +12,7 @@ vim.opt_local.formatoptions:append({
 -- find a golangci-lint config file for this buffer, if any, and read its version
 -- https://golangci-lint.run/usage/configuration#config-file
 local _, golangci_version = pcall(function()
-	for _, dir in ipairs({ module, project }) do
+	for _, dir in ipairs({ go.workspace.root or go.module.root, go.project.root }) do
 		for _, name in ipairs({
 			'.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json',
 		}) do
@@ -36,8 +35,9 @@ if golangci_version then
 end
 
 vim.api.nvim_buf_create_user_command(0, 'GoTestSum', function(details)
-	local wd = details.bang and (module or project) or vim.fn.expand('%:p:h')
+	local wd = details.bang and go.project.root or vim.fn.expand('%:p:h')
 	local color = '--no-color=' .. tostring(not vim.o.termguicolors)
+
 	vim.cmd.Dispatch('-dir=' .. wd, vim.env.GO or 'go', 'run',
 		'gotest.tools/gotestsum@latest', color, '--watch', '--watch-chdir', '--', '--count=1')
 end, {

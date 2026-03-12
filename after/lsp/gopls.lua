@@ -4,15 +4,7 @@
 local append = table.insert
 local join = table.concat
 local vim = vim
-
--- Replace go_env with the results of `go env` the first time it is accessed.
-local go_env = {}
-setmetatable(go_env, {
-	__index = function(_, key)
-		go_env = vim.json.decode(vim.fn.system({ vim.env.GO or 'go', 'env', '-json' }))
-		return go_env[key]
-	end,
-})
+local go = require('local').go
 
 ---@param flags string[] Go build flags
 ---@return string[] # build flags other than -tags
@@ -118,7 +110,7 @@ return {
 	-- https://github.com/neovim/nvim-lspconfig/pull/2661
 	root_dir = function(bufnr, yield)
 		local filepath = vim.api.nvim_buf_get_name(bufnr)
-		local modcache = go_env['GOMODCACHE']
+		local modcache = go.env['GOMODCACHE']
 
 		if vim.startswith(filepath, modcache) then
 			for _, client in ipairs(vim.lsp.get_clients({ name = 'gopls' })) do

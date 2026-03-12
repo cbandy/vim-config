@@ -1,6 +1,67 @@
 local vim, io = vim, io
 local M = {}
 
+--- Call the last argument `fun(): T?` once with all other arguments.
+---@generic T: any
+---@param ... any | fun(...: any): T?
+---@return T?
+function M.apply(...)
+	local args = { ... }; local fn = table.remove(args); return fn(unpack(args))
+end
+
+--- This returns the result of calling `t[k]()` or stores the value returned
+--- from calling `constructor()` as a closure in `t[k]`.
+---
+--- This is a trick for storing metatables in `vim` bridge variables.
+---@generic T: any
+---@param constructor fun(): T
+---@return T
+function M.bridge(t, k, constructor)
+	local fn = t[k]
+	if type(fn) == 'function' then return fn() end
+
+	local v = constructor()
+	t[k] = function() return v end
+	return v
+end
+
+---@class (exact) local.Go: go.Buffer
+---@field env table<string, string> | fun() This table contains cached results of `go env`. Call it to refresh its contents.
+---@type local.Go
+M.go = setmetatable({
+	env = setmetatable({}, {
+		loaded = false,
+		__newindex = function() error('readonly', 2) end,
+		__index = function(t, k)
+			if not getmetatable(t).loaded then t() end
+			return rawget(t, k)
+		end,
+		__call = function(t)
+			local ok, values = pcall(require('local.go').env)
+			if not ok then
+				---@cast values string
+				vim.notify(values, vim.log.levels.ERROR)
+			else
+				---@cast values table<string,string>
+				for k, _ in pairs(t) do rawset(t, k, nil) end
+				for k, v in pairs(values) do rawset(t, k, v) end
+				getmetatable(t).loaded = true
+			end
+			return t
+		end,
+	}),
+}, {
+	__newindex = function() error('readonly', 2) end,
+	__index = function(t, k)
+		if type(k) ~= 'number' then return M.go[0][k] end
+		return M.bridge(vim.b[k], 'local.go', function()
+			local data = require('local.go').Buffer(k)
+			rawset(data, 'env', t.env)
+			return data
+		end)
+	end,
+})
+
 ---@type vim.lsp.client.on_attach_cb
 function M.lsp_attach(client, bufnr)
 	---@type vim.keymap.set.Opts
