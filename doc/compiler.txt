@@ -1,0 +1,62 @@
+
+Error Format ~
+
+The 'errorformat' option is a comma-separated list of Vim regex with special |error-file-format|
+captures prefixed by "%". Each regex is tried in order as a complete match on each line of
+compiler output. The first [complete] match wins.
+
+⚠  Do not try to anchor using "^" or "$".
+⚠  Regex capturing groups "\(…\)" are not allowed; use non-capturing "\%(…\)". |E53|
+
+>
+  %c  capture column
+  %f  capture filepath
+  %l  capture line
+  %m  capture message
+
+  %G   general message
+  %+G  the entire line is `%m`
+  %-G  ignore
+
+  %A   start of multi-line
+  %+A  the entire line is `%m`
+  %C   continue multi-line
+  %-C  continue multi-line, but exclude
+  %Z   end of multi-line
+<
+
+To match literal "%", it must be escaped as "%%"
+To match literal ",", it must be escaped as "\,"
+
+To indicate a regex "\", it must be escaped as "%\"
+To indicate a regex ".", it must be escaped as "%."
+To indicate a regex "*", it must be escaped as "%#" ⚠
+To indicate a regex "[", it must be escaped as "%["
+
+Unfortunately, the characters above are what the 'errorformat' *interpreter* needs to see.
+To spell "\" in Vim, one must type "\\". The situation is worse in Lua: to give Vim "\\",
+one must type "\\\\"!
+
+For example, in VimScript:
+>vim
+  " regex-match zero or more pairs of spaces
+  echo '%\\%(  %\\)%#'
+
+  " regex-match a path-colon-line pair
+  echo '%\\f%\\+:%\\d%\\+'
+
+  " error-format capture a path-colon-line pair
+  echo '%f:%l'
+<
+For example, in Lua:
+>lua
+  -- regex-match zero or more pairs of spaces
+  '%\\\\%(  %\\\\)'
+
+  -- regex-match a path-colon-line pair
+  '%\\\\f%\\\\+:%\\\\d%\\\\+'
+
+  -- error-format capture a path-colon-line pair
+  '%f:%l'
+<
+vim: colorcolumn+=+0 filetype=help textwidth=98 :

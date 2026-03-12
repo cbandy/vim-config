@@ -149,7 +149,6 @@ Plug('tpope.io/vim/dadbod', {
 	load_because = { 'DB' },
 })
 Plug('tpope.io/vim/dispatch', {
-	load_because = { 'Dispatch' },
 	globals = {
 		dispatch_no_maps = true,
 		dispatch_tmux_height = '25%',

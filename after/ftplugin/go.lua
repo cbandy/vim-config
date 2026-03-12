@@ -45,9 +45,8 @@ end, {
 })
 
 vim.keymap.set('n', '<Leader>r', function()
-	-- use "-dir" with "dispatch.vim" to populate the quickfix list with proper paths.
-	-- https://github.com/vim-test/vim-test/issues/617
-	vim.cmd.Dispatch('-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', '.')
+	-- use "-dir" to populate quickfix with proper paths.
+	vim.cmd.Dispatch('-compiler=gotest', '-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', '.')
 end, {
 	buffer = true,
 	desc = 'run all tests in this package',
@@ -55,14 +54,20 @@ end, {
 
 vim.keymap.set('n', '<Leader>R', function()
 	-- use "test.vim" to find the nearest test function, suite, etc.
-	-- the first item in the returned list is the "-run" flag and value.
 	local cursor = vim.api.nvim_win_get_cursor(0)
 	local position = { file = vim.fn.expand('%:p'), line = cursor[1], col = cursor[2] }
+
+	-- the first item in the returned list is the "-run" flag and value.
 	local args = vim.fn['test#go#gotest#build_position']('nearest', position)
 
-	-- use "-dir" with "dispatch.vim" to populate the quickfix list with proper paths.
-	-- https://github.com/vim-test/vim-test/issues/617
-	vim.cmd.Dispatch('-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', args[1], '.')
+	if not args[1] or args[1] == '' then
+		-- the first item in the returned list is the "--focus" flag and value.
+		args = vim.fn['test#go#ginkgo#build_position']('nearest', position)
+		args[1] = args[1]:gsub('^[-][-]', '--ginkgo.')
+	end
+
+	-- use "-dir" to populate quickfix with proper paths.
+	vim.cmd.Dispatch('-compiler=gotest', '-dir=' .. vim.fn.expand('%:p:h'), vim.env.GO or 'go', 'test', '-v', args[1], '.')
 end, {
 	buffer = true,
 	desc = 'run the nearest test',
