@@ -106,7 +106,9 @@ end)
 -- Explain Neovim workspace to LuaLS
 require('lazydev').setup({
 	debug = false,
-	integrations = { lspconfig = false },
+	integrations = {
+		lspconfig = false, -- not using nvim-lspconfig
+	},
 	library = {
 		{ path = '${3rd}/luv/library', words = { 'vim%.uv' } },
 	},
@@ -140,6 +142,16 @@ end)
 
 require('mini.icons').setup({ style = 'ascii' })
 require('mini.pick').setup()
+require('mini.test').setup({
+	collect = {
+		find_files = function()
+			local globs = {}
+			vim.list_extend(globs, vim.fn.globpath('spec,test,tests', '**/test_*.lua', true, true))
+			vim.list_extend(globs, vim.fn.globpath('spec,test,tests', '**/*_spec.lua', true, true))
+			return globs
+		end,
+	},
+})
 
 require('nvim-tree').setup({
 	diagnostics = {
@@ -251,6 +263,9 @@ vim.keymap.set("n", 'gx', require('lsplinks').gx)
 --
 -- | Go | after/ftplugin/go.lua
 -- | https://go.dev
+--
+-- | Lua | after/ftplugin/lua.lua
+-- | https://lua.org https://luarocks.org
 --
 -- | Markdown | after/ftplugin/markdown.lua
 -- | https://commonmark.org

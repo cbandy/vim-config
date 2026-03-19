@@ -104,15 +104,17 @@ Plug('github.com/dense-analysis/ale', {
 		ale_sh_shellcheck_dialect = '',
 	},
 })
-Plug('github.com/echasnovski/mini.base16')
-Plug('github.com/echasnovski/mini.icons')
-Plug('github.com/echasnovski/mini.pick')
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/icholy/lsplinks.nvim')
 Plug('github.com/lifepillar/pgsql.vim', {
 	for_filetype = { 'sql' },
 })
+Plug('github.com/nvim-mini/mini.base16')
+Plug('github.com/nvim-mini/mini.extra')
+Plug('github.com/nvim-mini/mini.icons')
+Plug('github.com/nvim-mini/mini.pick')
+Plug('github.com/nvim-mini/mini.test')
 Plug('github.com/nvim-tree/nvim-tree.lua', { tag = '*' })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
 	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
@@ -167,9 +169,16 @@ Plug('tpope.io/vim/projectionist', {
 				['**/specs/*.spec'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
 				['**/sql/*.sql'] = { type = 'test', alternate = '{dirname}/expected/{basename}.out' },
 			},
+			['*.lua'] = {
+				['lua/*.lua'] = { type = 'source', alternate = { 'spec/{}_spec.lua', 'tests/{}_spec.lua', 'tests/test_{}.lua' } },
+				['spec/*_spec.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
+				['tests/*_spec.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
+				['tests/test_*.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
+			},
 			['Gemfile'] = {
-				['app/*.rb'] = { alternate = 'spec/{}_spec.rb', type = 'source' },
-				['lib/*.rb'] = { alternate = 'spec/{}_spec.rb', type = 'source' },
+				['app/*.rb'] = { type = 'source', alternate = 'spec/{}_spec.rb' },
+				['lib/*.rb'] = { type = 'source', alternate = 'spec/{}_spec.rb' },
+				['spec/*_spec.rb'] = { type = 'test', alternate = { 'app/{}.rb', 'lib/{}.rb' } },
 			},
 			['go.mod|go.work'] = {
 				['*.sql'] = { alternate = '{}.sql.go', type = 'source' },
