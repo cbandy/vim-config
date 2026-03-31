@@ -95,13 +95,12 @@ Plug('github.com/dense-analysis/ale', {
 			gomod = { 'gomod' }, -- gomod is `go mod` and always available
 		},
 		-- https://github.com/dense-analysis/ale/blob/-/ale_linters
-		ale_linters = {
-			sh = { 'shell', 'shellcheck' },
-		},
+		ale_linters = { sh = { 'shell', 'shellcheck' } },
 		-- use ShellCheck's algorithm for detecting a file's dialect
 		-- https://github.com/dense-analysis/ale/blob/-/autoload/ale/handlers/shellcheck.vim
 		-- https://github.com/koalaman/shellcheck/wiki/Directive
 		ale_sh_shellcheck_dialect = '',
+		ale_sh_shellcheck_change_directory = 0,
 	},
 })
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
