@@ -1,9 +1,7 @@
 -- https://pkg.go.dev/golang.org/x/tools/gopls#readme
 -- https://github.com/golang/tools/blob/-/gopls/doc/features
 
-local append = table.insert
-local join = table.concat
-local vim = vim
+local vim, table = vim, table
 local go = require('local').go
 
 ---@param flags string[] Go build flags
@@ -24,11 +22,7 @@ local function extract_build_tags(flags)
 		end
 	end):totable()
 
-	tags = vim.iter(pairs(tags)):fold({}, function(out, k, _)
-		table.insert(out, k); return out;
-	end)
-
-	return flags, join(tags, ',')
+	return flags, table.concat(vim.tbl_keys(tags), ',')
 end
 
 ---@param client vim.lsp.Client
@@ -59,11 +53,8 @@ end
 ---@type vim.lsp.Config
 return {
 	-- https://github.com/golang/tools/blob/-/gopls/doc/daemon.md
-	cmd = {
-		'nice', vim.env.GO or 'go', 'run', 'golang.org/x/tools/gopls@latest',
-		'--remote=auto', '--remote.listen.timeout=15s',
-	},
-	filetypes = { 'go', 'gomod', 'gotmpl', 'gowork' },
+	cmd = { 'nice', vim.env.GO or 'go', 'run', 'golang.org/x/tools/gopls@latest', '--remote=auto', '--remote.listen.timeout=15s' },
+	filetypes = { 'go', 'gomod' },
 
 	offset_encoding = 'utf-8',
 	on_attach = function(client, bufnr)
@@ -79,18 +70,18 @@ return {
 		-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
 		vim.api.nvim_buf_create_user_command(bufnr, 'GoBuildTags', function(details)
 			local flags = vim.tbl_get(client.config.settings, 'gopls', 'buildFlags') or {}
-			local tags = join(details.fargs, ',')
+			local tags = table.concat(details.fargs, ',')
 
 			if details.bang and #details.args == 0 then
 				flags, _ = extract_build_tags(flags)
 				tags = ''
 			elseif details.bang then
 				flags, _ = extract_build_tags(flags)
-				append(flags, '-tags=' .. tags)
+				table.insert(flags, '-tags=' .. tags)
 			elseif #details.args > 0 then
-				append(flags, '-tags=' .. tags)
+				table.insert(flags, '-tags=' .. tags)
 				flags, tags = extract_build_tags(flags)
-				append(flags, '-tags=' .. tags)
+				table.insert(flags, '-tags=' .. tags)
 			end
 
 			-- update when replacing or extending
@@ -149,6 +140,6 @@ return {
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#completion
 			usePlaceholders = true,
-		}
+		},
 	},
 }

@@ -67,12 +67,14 @@ vim.opt.splitright = true
 vim.opt.updatetime = 1000 -- milliseconds
 
 -- ignore some files and directories when globbing [:help 'wildignore']
-vim.opt.wildignore:append { '*.DS_Store', '*/.git/*' }
+vim.opt.wildignore:append({ '*.DS_Store', '*/.git/*' })
 vim.opt.wildignorecase = true
 
 -- show a border around popup menus and windows [:help 'winborder']
---vim.opt.pumborder = 'rounded' -- Neovim 0.12 -- https://github.com/neovim/neovim/pull/25541
+if vim.fn.has('nvim-0.12') > 0 then vim.opt.pumborder = 'rounded' end
 vim.opt.winborder = 'rounded'
+
+if vim.fn.has('nvim-0.12') > 0 then require('vim._core.ui2').enable({}) end
 
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({
@@ -104,17 +106,11 @@ end)
 -- Explain Neovim workspace to LuaLS
 require('lazydev').setup({
 	debug = false,
-	integrations = {
-		lspconfig = false, -- not using nvim-lspconfig
-	},
-	library = {
-		{ path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-	},
+	integrations = { lspconfig = false }, -- not using nvim-lspconfig
+	library = { { path = '${3rd}/luv/library', words = { 'vim%.uv' } } },
 })
 
-require('lsplinks').setup({
-	highlight = false,
-})
+require('lsplinks').setup({ highlight = false })
 
 -- Configure builtin and popular highlights using a Base16 palette.
 -- (Not technically a colorscheme.)
@@ -152,10 +148,8 @@ require('mini.test').setup({
 })
 
 require('nvim-tree').setup({
-	diagnostics = {
-		enable = true,
-		icons = { hint = '!', info = 'ℹ', warning = '⚠', error = '🔥' },
-	},
+	diagnostics = { enable = true, icons = { hint = '!', info = 'ℹ', warning = '⚠', error = '🔥' } },
+	hijack_netrw = false,
 	renderer = {
 		add_trailing = true,
 		full_name = true,
@@ -185,16 +179,13 @@ require('local').treesitter_setup({
 		'bash', 'dockerfile', 'helm', 'javascript', 'lua', 'luap', 'perl',
 		'php_only', 'python', 'ruby', 'sql', 'vhs',
 		-- compiled
-		'c', 'cpp', 'go', 'gomod', 'rust', 'typescript',
+		'c', 'cpp', 'go', 'gomod', 'gowork', 'rust', 'typescript',
 		-- presentation
 		'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html',
 		'markdown', 'markdown_inline', 'rst', 'tsx',
 	},
 	['nvim-treesitter'] = {},
-	['nvim-treesitter-context'] = {
-		mode = 'topline',
-		multiline_threshold = 4,
-	},
+	['nvim-treesitter-context'] = { mode = 'topline', multiline_threshold = 4 },
 	['nvim-treesitter.parsers'] = {
 		asciidoc = {
 			install_info = {
@@ -228,14 +219,11 @@ require('local').treesitter_setup({
 })
 
 vim.g.mapleader = ','
-vim.keymap.set('n', '<space>', 'za', {
-	desc = 'toggle the fold under the cursor [:help fold-commands]',
-	silent = true,
-})
+vim.keymap.set('n', '<space>', 'za', { desc = 'toggle the fold under the cursor [:help fold-commands]', silent = true })
 vim.keymap.set('n', '<C-p>', MiniPick.builtin.files, { desc = 'file picker' })
 vim.keymap.set({ 'n', 'v' }, '<C-Up>', '<C-A>', { desc = 'increment' })
 vim.keymap.set({ 'n', 'v' }, '<C-Down>', '<C-X>', { desc = 'decrement' })
-vim.keymap.set('n', '<Leader>nt', require("nvim-tree.api").tree.toggle, {
+vim.keymap.set('n', '<Leader>nt', require('nvim-tree.api').tree.toggle, {
 	desc = 'open or close the file explorer [:help nvim-tree]',
 })
 vim.keymap.set('n', '<Leader>r', ':TestFile<CR>', { silent = true })
@@ -243,7 +231,7 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
-vim.keymap.set("n", 'gx', require('lsplinks').gx)
+vim.keymap.set('n', 'gx', require('lsplinks').gx)
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be

@@ -207,7 +207,7 @@ function M.spellfile_good_words(lang2)
 	end)
 end
 
--- https://github.com/nvim-treesitter/nvim-treesitter/tree/main#supported-features
+-- https://github.com/nvim-treesitter/nvim-treesitter#supported-features
 function M.treesitter_enable(features)
 	for k, v in pairs(features) do
 		if type(k) == 'number' then k, v = v, true end
@@ -220,7 +220,7 @@ function M.treesitter_setup(config)
 	require('nvim-treesitter').setup(config['nvim-treesitter'])
 	require('treesitter-context').setup(config['nvim-treesitter-context'])
 
-	-- https://github.com/nvim-treesitter/nvim-treesitter/tree/main#adding-custom-languages
+	-- https://github.com/nvim-treesitter/nvim-treesitter#adding-custom-languages
 	vim.api.nvim_create_autocmd('User', {
 		pattern = 'TSUpdate',
 		callback = function()
@@ -228,7 +228,7 @@ function M.treesitter_setup(config)
 			for k, v in pairs(config['nvim-treesitter.parsers']) do
 				parsers[k] = vim.tbl_extend('force', { tier = 2 }, v)
 			end
-		end
+		end,
 	})
 
 	require('nvim-treesitter').install(config.languages)

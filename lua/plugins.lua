@@ -69,12 +69,8 @@ end
 vim.call('plug#begin', vim.fs.joinpath(vim.fn.stdpath('data'), 'plugged'))
 
 
-Plug('github.com/airblade/vim-gitgutter', {
-	load_because = { 'GitGutterEnable', 'GitGutterBufferEnable' },
-})
-Plug('github.com/chrisbra/unicode.vim', {
-	after_update = ':DownloadUnicode',
-})
+Plug('github.com/airblade/vim-gitgutter', { load_because = { 'GitGutterEnable', 'GitGutterBufferEnable' } })
+Plug('github.com/chrisbra/unicode.vim', { after_update = ':UnicodeDownload!' })
 Plug('github.com/dense-analysis/ale', {
 	commit = '067e74fee8b404d2ab36804943b8dd68c7a38327',
 	for_filetype = { 'go', 'gomod', 'sh' },
@@ -106,9 +102,7 @@ Plug('github.com/dense-analysis/ale', {
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
 Plug('github.com/icholy/lsplinks.nvim')
-Plug('github.com/lifepillar/pgsql.vim', {
-	for_filetype = { 'sql' },
-})
+Plug('github.com/lifepillar/pgsql.vim', { for_filetype = { 'sql' } })
 Plug('github.com/nvim-mini/mini.base16')
 Plug('github.com/nvim-mini/mini.extra')
 Plug('github.com/nvim-mini/mini.icons')
