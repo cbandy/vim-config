@@ -73,9 +73,7 @@ function M.lsp_attach(client, bufnr)
 		local trigger = client.server_capabilities.completionProvider.triggerCharacters
 
 		vim.opt_local.completeopt:append({ 'menuone', 'noselect', 'popup' })
-		vim.lsp.completion.enable(true, client.id, bufnr, {
-			autotrigger = trigger and #trigger > 0,
-		})
+		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = trigger and #trigger > 0 })
 	end
 
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_definition
@@ -94,6 +92,11 @@ function M.lsp_attach(client, bufnr)
 				vim.wo[winid].foldexpr = 'v:lua.vim.lsp.foldexpr()'
 			end
 		end
+	end
+
+	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_inlayHint
+	if client:supports_method('textDocument/inlayHint', bufnr) then
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end
 
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_typeDefinition
