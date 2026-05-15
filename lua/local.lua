@@ -96,7 +96,9 @@ function M.lsp_attach(client, bufnr)
 
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_inlayHint
 	if client:supports_method('textDocument/inlayHint', bufnr) then
-		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+		vim.keymap.set('n', '<Leader>i',
+			function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr }) end,
+			vim.tbl_extend('keep', opts, { desc = 'vim.lsp.inlay_hint.enable()' }))
 	end
 
 	-- https://microsoft.github.io/language-server-protocol/specifications/specification-current#textDocument_typeDefinition
