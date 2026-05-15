@@ -101,7 +101,6 @@ Plug('github.com/dense-analysis/ale', {
 })
 Plug('github.com/epwalsh/pomo.nvim', { tag = '*' })
 Plug('github.com/folke/lazydev.nvim', { tag = '*' })
-Plug('github.com/icholy/lsplinks.nvim')
 Plug('github.com/lifepillar/pgsql.vim', { for_filetype = { 'sql' } })
 Plug('github.com/nvim-mini/mini.base16')
 Plug('github.com/nvim-mini/mini.extra')
