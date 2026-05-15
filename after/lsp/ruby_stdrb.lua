@@ -2,7 +2,7 @@
 
 ---@type vim.lsp.Config
 return {
-	cmd = { 'bundle', 'exec', 'standardrb', '--lsp' },
+	cmd = { 'nice', 'bundle', 'exec', 'standardrb', '--lsp' },
 	filetypes = { 'ruby' },
 	root_markers = { 'Gemfile' },
 }
