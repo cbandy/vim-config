@@ -63,9 +63,7 @@ return {
 		-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
 		vim.api.nvim_buf_create_user_command(bufnr, 'GoBuildFlags', function(details)
 			update_build_flags(client, bufnr, details.bang, details.fargs)
-		end, {
-			bang = true, nargs = '*', desc = 'view, add, or replace Go build flags',
-		})
+		end, { bang = true, nargs = '*', desc = 'view, add, or replace Go build flags' })
 
 		-- https://github.com/golang/tools/blob/-/gopls/doc/settings.md#buildflags-string
 		vim.api.nvim_buf_create_user_command(bufnr, 'GoBuildTags', function(details)
@@ -90,9 +88,7 @@ return {
 			end
 
 			vim.notify(('Tags: %q'):format(tags), vim.log.levels.INFO)
-		end, {
-			bang = true, nargs = '*', desc = 'view, add, or replace Go build tags',
-		})
+		end, { bang = true, nargs = '*', desc = 'view, add, or replace Go build tags' })
 	end,
 
 	-- Indicate any gopls is acceptable for files in GOMODCACHE.
@@ -117,18 +113,11 @@ return {
 	settings = {
 		gopls = {
 			-- https://github.com/golang/tools/blob/-/gopls/doc/analyzers.md
-			analyses = {
-				shadow = true,
-			},
+			analyses = { shadow = true },
 			-- https://github.com/golang/tools/blob/-/gopls/doc/codelenses.md
-			codelenses = {
-				vulncheck = true,
-			},
+			codelenses = { vulncheck = true },
 			-- https://github.com/golang/tools/blob/-/gopls/doc/inlayHints.md
-			hints = {
-				constantValues = true,
-				parameterNames = true,
-			},
+			hints = { constantValues = true, parameterNames = true },
 
 			-- https://github.com/golang/tools/blob/master/gopls/doc/settings.md#formatting
 			gofumpt = false,

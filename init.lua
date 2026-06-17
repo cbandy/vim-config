@@ -77,17 +77,11 @@ vim.opt.winborder = 'rounded'
 if vim.fn.has('nvim-0.12') > 0 then require('vim._core.ui2').enable({}) end
 
 ---@type vim.diagnostic.Opts
-vim.diagnostic.config({
-	virtual_lines = { current_line = true },
-	virtual_text = true,
-})
+vim.diagnostic.config({ virtual_lines = { current_line = true }, virtual_text = true })
 
 ---@param vim_lsp_extend fun(name: string, config: vim.lsp.Config) # add LSP configuration [:help lsp-config]
 apply(vim.lsp.config, function(vim_lsp_extend)
-	vim_lsp_extend('*', {
-		root_markers = { '.git' },
-		on_attach = require('local').lsp_attach,
-	})
+	vim_lsp_extend('*', { root_markers = { '.git' }, on_attach = require('local').lsp_attach })
 	-- after/lsp/*.lua
 	vim.lsp.enable({
 		'gopls',
