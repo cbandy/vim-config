@@ -245,7 +245,10 @@ end
 ---@return string # VSCode language identifier
 function M.vscode_language(filetype)
 	return ({
+		cuda = 'cuda-cpp',
 		gitcommit = 'git-commit',
+		objc = 'objective-c',
+		objcpp = 'objective-cpp',
 		sh = 'shellscript',
 		text = 'plaintext',
 	})[filetype] or filetype

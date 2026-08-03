@@ -82,18 +82,29 @@ vim.diagnostic.config({ virtual_lines = { current_line = true }, virtual_text = 
 ---@param vim_lsp_extend fun(name: string, config: vim.lsp.Config) # add LSP configuration [:help lsp-config]
 apply(vim.lsp.config, function(vim_lsp_extend)
 	vim_lsp_extend('*', { root_markers = { '.git' }, on_attach = require('local').lsp_attach })
+
+	for name, config in pairs({
+		-- https://clangd.llvm.org
+		clangd = { filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' }, cmd = { 'nice', 'clangd' } },
+		-- https://pkg.go.dev/github.com/wader/jq-lsp
+		jqls = { filetypes = { 'jq' }, cmd = { 'nice', 'go', 'run', 'github.com/wader/jq-lsp@latest' } },
+		-- https://sorbet.org
+		ruby_sorbet = { filetypes = { 'ruby' }, root_markers = { 'Gemfile' }, cmd = { 'nice', 'bundle', 'exec', 'srb', 'tc', '--disable-watchman', '--lsp' } },
+		-- https://github.com/standardrb/standard
+		ruby_stdrb = { filetypes = { 'ruby' }, root_markers = { 'Gemfile' }, cmd = { 'nice', 'bundle', 'exec', 'standardrb', '--lsp' } },
+		-- https://tombi-toml.github.io/tombi/docs/configuration
+		tombi = { filetypes = { 'toml' }, root_markers = { vim.fs.joinpath('.config', 'tombi.toml'), '.git' }, cmd = { 'nice', 'tombi', 'lsp' } },
+		-- https://docs.zubanls.com
+		zuban = { filetypes = { 'python' }, cmd = { 'nice', 'zuban', 'server' } },
+	}) do
+		vim_lsp_extend(name, config)
+		vim.lsp.enable(name)
+	end
+
 	-- after/lsp/*.lua
-	vim.lsp.enable({
-		'gopls',
-		'jqls',
-		'ltexls',
-		'lua_ls', -- 'lazydev' requires this to be named 'lua_ls'
-		'ruby_sorbet', 'ruby_stdrb',
-		'rust',
-		'yamlls',
-	})
+	vim.lsp.enable({ 'gopls', 'rust', 'yamlls' })
+	vim.lsp.enable({ 'lua_ls' }) -- 'lazydev' requires this to be named 'lua_ls'
 	vim.env.PATH = vim.env.PATH
-			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'ltex-ls-plus', 'bin')
 			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
 end)
 
