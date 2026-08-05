@@ -102,7 +102,7 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 	end
 
 	-- after/lsp/*.lua
-	vim.lsp.enable({ 'gopls', 'rust', 'yamlls' })
+	vim.lsp.enable({ 'gopls', 'harper_ls', 'rust', 'yamlls' })
 	vim.lsp.enable({ 'lua_ls' }) -- 'lazydev' requires this to be named 'lua_ls'
 	vim.env.PATH = vim.env.PATH
 			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
