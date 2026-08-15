@@ -102,8 +102,7 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 	end
 
 	-- after/lsp/*.lua
-	vim.lsp.enable({ 'gopls', 'harper_ls', 'rust', 'yamlls' })
-	vim.lsp.enable({ 'lua_ls' }) -- 'lazydev' requires this to be named 'lua_ls'
+	vim.lsp.enable({ 'gopls', 'lua_ls', 'rust', 'yamlls' })
 	vim.env.PATH = vim.env.PATH
 			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
 end)
@@ -172,6 +171,27 @@ require('nvim-tree').setup({
 	},
 })
 
+require('sidekick').setup({
+	nes = { enabled = false },
+	cli = {
+		mux = { backend = 'tmux', create = 'split', enabled = true, split = { vertical = false, size = 0.2 } },
+		tools = {
+			antigravity = {
+				url = 'https://antigravity.google/docs/cli/overview',
+				cmd = { 'nice', 'agy', '--project=' .. vim.fs.basename(vim.fn.getcwd()) },
+				is_proc = '\\<agy\\>',
+				resume = { '--continue' },
+				continue = { '--continue' },
+				format = function(text)
+					require('sidekick.text').transform(text, function(str)
+						return str:find('[^%w/_%.%-]') and ('"' .. str .. '"') or str
+					end, 'SidekickLocFile')
+				end,
+			},
+		},
+	},
+})
+
 require('local').treesitter_setup({
 	languages = {
 		-- config and data
@@ -234,6 +254,11 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
+
+vim.keymap.set('n', '<Leader>aa', function() require('sidekick.cli').toggle() end)
+vim.keymap.set('n', '<Leader>af', function() require('sidekick.cli').send({ msg = '{file}' }) end)
+vim.keymap.set('x', '<Leader>av', function() require('sidekick.cli').send({ msg = '{selection}' }) end)
+vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').send({ msg = '{this}' }) end)
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be

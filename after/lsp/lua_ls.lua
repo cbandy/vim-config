@@ -4,6 +4,7 @@ local vim = vim
 
 ---@type vim.lsp.Config
 return {
+	name = 'lua_ls', -- 'lazydev' requires this to be named 'lua_ls'
 	cmd = { 'nice', vim.env.LUA_LS or 'lua-language-server' },
 	filetypes = { 'lua' },
 
@@ -13,6 +14,6 @@ return {
 			-- https://luals.github.io/wiki/diagnostics
 			['diagnostics.disable'] = {},
 			['diagnostics.globals'] = {},
-		}
+		},
 	},
 }
