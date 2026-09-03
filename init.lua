@@ -178,7 +178,7 @@ require('sidekick').setup({
 		tools = {
 			antigravity = {
 				url = 'https://antigravity.google/docs/cli/overview',
-				cmd = { 'nice', 'agy', '--project=' .. vim.fs.basename(vim.fn.getcwd()) },
+				cmd = { 'nice', 'agy', '--project=' .. require('local').hashed_uuid(vim.fn.getcwd()) },
 				is_proc = '\\<agy\\>',
 				resume = { '--continue' },
 				continue = { '--continue' },

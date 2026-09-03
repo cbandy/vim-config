@@ -62,6 +62,14 @@ M.go = setmetatable({
 	end,
 })
 
+---@param input string
+---@return string
+function M.hashed_uuid(input)
+	local hash = vim.fn.sha256(input)
+	return string.format('%s-%s-%s-%s-%s',
+		hash:sub(1, 8), hash:sub(9, 12), hash:sub(13, 16), hash:sub(17, 20), hash:sub(21, 32))
+end
+
 ---@type vim.lsp.client.on_attach_cb
 function M.lsp_attach(client, bufnr)
 	---@type vim.keymap.set.Opts
