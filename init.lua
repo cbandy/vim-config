@@ -88,10 +88,14 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 		clangd = { filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' }, cmd = { 'nice', 'clangd' } },
 		-- https://pkg.go.dev/github.com/wader/jq-lsp
 		jqls = { filetypes = { 'jq' }, cmd = { 'nice', 'go', 'run', 'github.com/wader/jq-lsp@latest' } },
+		-- https://pkg.go.dev/github.com/grafana/jsonnet-language-server/pkg/server#Configuration
+		jsonnet = { filetypes = { 'jsonnet', 'libsonnet' }, cmd = { 'nice', 'go', 'run', 'github.com/grafana/jsonnet-language-server@latest' } },
 		-- https://sorbet.org
 		ruby_sorbet = { filetypes = { 'ruby' }, root_markers = { 'Gemfile' }, cmd = { 'nice', 'bundle', 'exec', 'srb', 'tc', '--disable-watchman', '--lsp' } },
 		-- https://github.com/standardrb/standard
 		ruby_stdrb = { filetypes = { 'ruby' }, root_markers = { 'Gemfile' }, cmd = { 'nice', 'bundle', 'exec', 'standardrb', '--lsp' } },
+		-- https://github.com/facebook/starlark-rust
+		starlark = { filetypes = { 'bzl', 'starlark' }, cmd = { 'nice', 'starlark', '--lsp' } },
 		-- https://tombi-toml.github.io/tombi/docs/configuration
 		tombi = { filetypes = { 'toml' }, root_markers = { vim.fs.joinpath('.config', 'tombi.toml'), '.git' }, cmd = { 'nice', 'tombi', 'lsp' } },
 		-- https://docs.zubanls.com
@@ -195,7 +199,7 @@ require('sidekick').setup({
 require('local').treesitter_setup({
 	languages = {
 		-- config and data
-		'csv', 'json', 'pem', 'properties', 'psv', 'toml', 'tsv', 'xml', 'yaml',
+		'csv', 'json', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
 		-- editing
 		'diff', 'editorconfig', 'vim', 'vimdoc',
 		-- interpreted
