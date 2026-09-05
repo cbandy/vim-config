@@ -1,17 +1,6 @@
 local vim, io = vim, io
 local go = require('local').go
 
-vim.opt_local.tabstop = 2
-vim.opt_local.formatoptions:append({ -- [:help fo-table]
-	-- continue comments when hitting <Enter> in Insert mode
-	r = true,
-	-- continue comments when appending lines in Normal mode
-	o = true,
-	-- wrap comments (not code) at 'textwidth'
-	c = true,
-	t = false,
-})
-
 -- find a golangci-lint config file for this buffer, if any, and read its version
 -- https://golangci-lint.run/usage/configuration#config-file
 local _, golangci_version = pcall(function()

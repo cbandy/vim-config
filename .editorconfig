@@ -12,6 +12,7 @@ indent_style = tab
 tab_width = 2
 
 # https://github.com/CppCXY/EmmyLuaCodeStyle/blob/-/docs/format_config_EN.md
+align_continuous_assign_statement = false
 call_arg_parentheses = always
 quote_style = single
 trailing_table_separator = smart

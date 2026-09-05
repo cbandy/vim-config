@@ -30,6 +30,17 @@ vim.opt.writebackup = false
 vim.opt.foldlevelstart = 0
 vim.opt.foldmethod = 'manual'
 
+-- [:help fo-table]
+vim.opt.formatoptions:append({
+	---@format disable
+	r = true, -- continue comments when hitting <Enter> in Insert mode
+	o = true, -- continue comments when appending lines in Normal mode
+	j = true, -- remove comment indicator when joining lines
+	c = true, t = false, -- wrap comments (not code) at 'textwidth'
+	['/'] = true, -- only continue comments when they are the entire line
+	['1'] = true, -- break long lines *before* a one-letter word
+})
+
 -- do not use the mouse [:help 'mouse']
 vim.opt.mouse = ''
 vim.opt.mousefocus = false
@@ -317,7 +328,7 @@ apply(vim.api.nvim_create_augroup('local', { clear = true }), function(groupnr)
 		{ { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
 		{ { 'query', 'toml', 'yaml' },   { tabstop = 2, expandtab = true } },
 		{ { 'python' },                  { tabstop = 4, expandtab = true } },
-		{ { 'javascript' },              { tabstop = 2 } },
+		{ { 'go', 'javascript' },        { tabstop = 2 } },
 		{ { 'php', 'sh' },               { tabstop = 4 } },
 		{ { 'markdown', 'yaml' },        { list = true, listchars = 'trail:·' } },
 	}) do
