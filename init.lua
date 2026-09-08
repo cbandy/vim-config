@@ -187,6 +187,7 @@ require('nvim-tree').setup({
 })
 
 require('sidekick').setup({
+	copilot = { status = { enabled = false } },
 	nes = { enabled = false },
 	cli = {
 		mux = { backend = 'tmux', create = 'split', enabled = true, split = { vertical = false, size = 0.2 } },
@@ -203,6 +204,7 @@ require('sidekick').setup({
 					end, 'SidekickLocFile')
 				end,
 			},
+			claude = { url = 'https://code.claude.com/docs/en/cli-reference', cmd = { 'nice', 'claude' } },
 		},
 	},
 })
