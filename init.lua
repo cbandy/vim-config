@@ -211,8 +211,8 @@ require('sidekick').setup({
 
 require('local').treesitter_setup({
 	languages = {
-		-- config and data
-		'csv', 'json', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
+		-- configuration and data
+		'csv', 'json', 'nix', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
 		-- editing
 		'diff', 'editorconfig', 'vim', 'vimdoc',
 		-- interpreted
@@ -324,15 +324,14 @@ vim.filetype.add({
 })
 
 apply(vim.api.nvim_create_augroup('local', { clear = true }), function(groupnr)
-	-- create an index of local options by filetype
 	local opts = {}
 	for _, short in ipairs({
-		{ { 'cucumber', 'ruby', 'sql' }, { tabstop = 2, expandtab = true } },
-		{ { 'query', 'toml', 'yaml' },   { tabstop = 2, expandtab = true } },
-		{ { 'python' },                  { tabstop = 4, expandtab = true } },
-		{ { 'go', 'javascript' },        { tabstop = 2 } },
-		{ { 'php', 'sh' },               { tabstop = 4 } },
-		{ { 'markdown', 'yaml' },        { list = true, listchars = 'trail:·' } },
+		{ { 'cucumber', 'query', 'ruby' },  { tabstop = 2, expandtab = true } },
+		{ { 'nix', 'sql', 'toml', 'yaml' }, { tabstop = 2, expandtab = true } },
+		{ { 'python', 'starlark' },         { tabstop = 4, expandtab = true } },
+		{ { 'go', 'javascript' },           { tabstop = 2 } },
+		{ { 'php', 'sh' },                  { tabstop = 4 } },
+		{ { 'markdown', 'yaml' },           { list = true, listchars = 'trail:·' } },
 	}) do
 		for _, ft in ipairs(short[1]) do
 			opts[ft] = vim.tbl_extend('keep', opts[ft] or {}, short[2])
