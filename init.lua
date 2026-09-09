@@ -85,8 +85,6 @@ vim.opt.wildignorecase = true
 if vim.fn.has('nvim-0.12') > 0 then vim.opt.pumborder = 'rounded' end
 vim.opt.winborder = 'rounded'
 
-if vim.fn.has('nvim-0.12') > 0 then require('vim._core.ui2').enable({}) end
-
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({ virtual_lines = { current_line = true }, virtual_text = true })
 
@@ -184,6 +182,17 @@ require('nvim-tree').setup({
 			},
 		},
 	},
+})
+
+require('pomo').setup({
+	-- use these when not specified
+	notifiers = vim.iter({
+		{ { name = 'Default', opts = { text_icon = '⏱️', title_icon = '⏳' } } },
+		jit.os == 'OSX' and { { name = 'System' } } or {},
+	}):flatten():totable(),
+	timers = {},          -- override notifier by timer name
+	sessions = {},        -- define sequences of timers
+	update_interval = 1e3, -- one second
 })
 
 require('sidekick').setup({

@@ -110,45 +110,32 @@ Plug('github.com/nvim-mini/mini.pick')
 Plug('github.com/nvim-mini/mini.test')
 Plug('github.com/nvim-tree/nvim-tree.lua', { tag = '*' })
 Plug('github.com/nvim-treesitter/nvim-treesitter', {
-	-- The 'master' branch is frozen and the 'main' branch leverages the newest LSP features.
-	-- https://github.com/nvim-treesitter/nvim-treesitter/issues/4767
-	branch = vim.fn.has('nvim-0.11') > 0 and 'main' or 'master',
+	-- https://github.com/nvim-treesitter/nvim-treesitter#readme
+	branch = vim.fn.has('nvim-0.12') > 0 and 'main' or 'master',
 	after_update = ':TSUpdate',
 })
-Plug('github.com/nvim-treesitter/nvim-treesitter-context', {
-	requires = {
-		'github.com/nvim-treesitter/nvim-treesitter',
-	},
-})
+Plug('github.com/nvim-treesitter/nvim-treesitter-context',
+	{ requires = { 'github.com/nvim-treesitter/nvim-treesitter' } })
+Plug('github.com/rcarriga/nvim-notify')
 Plug('github.com/vim-test/vim-test', {
 	globals = {
 		['test#strategy'] = 'dispatch',
 		['test#echo_command'] = false,
 		['test#enabled_runners'] = {
 			'go#gotest', 'go#ginkgo', 'php#phpunit', 'python#pytest',
-			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargonextest',
+			'ruby#cucumber', 'ruby#minitest', 'ruby#rspec', 'rust#cargotest',
 		},
 	},
 })
 
-Plug('tpope.io/vim/abolish', {
-	load_because = { 'Abolish', 'Subvert', 'S' },
-	globals = {
-		abolish_no_mappings = true,
-	},
-})
+Plug('tpope.io/vim/abolish', { globals = { abolish_no_mappings = true } })
 Plug('tpope.io/vim/commentary')
-Plug('tpope.io/vim/dadbod', {
-	load_because = { 'DB' },
-})
+Plug('tpope.io/vim/dadbod', { load_because = { 'DB' } })
 Plug('tpope.io/vim/dispatch', {
 	globals = {
 		dispatch_no_maps = true,
 		dispatch_tmux_height = '25%',
-		dispatch_compilers = {
-			['bundle exec'] = '',
-			['gotestsum'] = 'go',
-		},
+		dispatch_compilers = { ['bundle exec'] = '', ['gotestsum'] = 'go' },
 	},
 })
 Plug('tpope.io/vim/endwise')
