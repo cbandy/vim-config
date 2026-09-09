@@ -226,7 +226,10 @@ require('local').treesitter_setup({
 	},
 	['nvim-treesitter'] = {},
 	['nvim-treesitter-context'] = { mode = 'topline', multiline_threshold = 4 },
+
+	-- consider https://github.com/helix-editor/helix/blob/-/languages.toml
 	['nvim-treesitter.parsers'] = {
+		alloy = { install_info = { url = 'https://github.com/mattsre/tree-sitter-alloy' } },
 		asciidoc = {
 			install_info = {
 				url = 'https://github.com/cathaysia/tree-sitter-asciidoc',
@@ -243,18 +246,7 @@ require('local').treesitter_setup({
 				queries = 'tree-sitter-asciidoc_inline/queries',
 			},
 		},
-		jq = {
-			install_info = {
-				url = 'https://github.com/nverno/tree-sitter-jq',
-				branch = 'master',
-				queries = 'queries',
-			},
-		},
-		make = {
-			install_info = {
-				url = 'https://github.com/tree-sitter-grammars/tree-sitter-make',
-			},
-		},
+		jq = { install_info = { url = 'https://github.com/nverno/tree-sitter-jq', branch = 'master' } },
 	},
 })
 
@@ -317,9 +309,9 @@ vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').se
 
 vim.filetype.add({
 	extension = {
-		-- https://docs.docker.com/build/concepts/context/#filename-and-location
-		['dockerignore'] = 'gitignore',
-		['mdx'] = 'markdown',
+		['als'] = 'alloy',            -- https://alloytools.org → https://github.com/AlloyTools
+		['dockerignore'] = 'gitignore', -- https://docs.docker.com/build/concepts/context#filename-and-location
+		['mdx'] = 'markdown',         -- https://mdxjs.com
 	},
 })
 
