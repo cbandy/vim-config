@@ -142,6 +142,8 @@ Plug('tpope.io/vim/endwise')
 Plug('tpope.io/vim/fugitive')
 Plug('tpope.io/vim/projectionist', {
 	globals = {
+		-- Every LHS has a '**' portion that expands to '{dirname}' and a '*' portion that expands to '{basename}'.
+		-- When missing, '**' is implicitly prepended to '*'. On the RHS, '{}' expands to '{dirname}/{basename}'.
 		projectionist_heuristics = {
 			['*.control'] = {
 				['**/expected/*.out'] = { type = 'out', alternate = { '{dirname}/specs/{basename}.spec', '{dirname}/sql/{basename}.sql' } },
@@ -153,6 +155,10 @@ Plug('tpope.io/vim/projectionist', {
 				['spec/*_spec.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
 				['tests/*_spec.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
 				['tests/test_*.lua'] = { type = 'test', alternate = 'lua/{}.lua' },
+			},
+			['Cargo.toml'] = {
+				['tests/*.rs'] = { type = 'test', alternate = 'tests/{}.stderr' },
+				['tests/*.stderr'] = { type = 'out', alternate = 'tests/{}.rs' },
 			},
 			['Gemfile'] = {
 				['app/*.rb'] = { type = 'source', alternate = 'spec/{}_spec.rb' },

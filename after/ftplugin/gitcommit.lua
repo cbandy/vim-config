@@ -1,3 +1,5 @@
+-- https://git-scm.com
+
 local vim = vim
 
 -- The builtin "gitcommit" syntax highlights characters that extend beyond

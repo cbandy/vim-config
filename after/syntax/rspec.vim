@@ -1,3 +1,5 @@
+" https://rspec.info
+
 let b:spelldir  = '%:.'
 let b:spellfile = &spelllang . '.' . &encoding . '.add'
 

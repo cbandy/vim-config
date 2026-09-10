@@ -1,3 +1,5 @@
+-- https://ruby-lang.org
+
 local vim = vim
 
 -- [:help ft-ruby-syntax]

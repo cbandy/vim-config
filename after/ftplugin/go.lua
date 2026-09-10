@@ -1,3 +1,5 @@
+-- https://go.dev
+
 local vim, io = vim, io
 local go = require('local').go
 

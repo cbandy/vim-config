@@ -1,3 +1,5 @@
+-- https://mdxjs.com
+
 -- Identifying 'mdx' as an additional extension for the 'markdown' filetype
 -- has been sufficient so far.
 --

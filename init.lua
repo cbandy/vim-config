@@ -273,7 +273,8 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
 
-vim.keymap.set('n', '<Leader>aa', function() require('sidekick.cli').toggle() end)
+vim.keymap.set('n', '<Leader>aa', function() require('sidekick.cli').toggle({ name = 'antigravity' }) end)
+vim.keymap.set('n', '<Leader>ac', function() require('sidekick.cli').toggle({ name = 'claude' }) end)
 vim.keymap.set('n', '<Leader>af', function() require('sidekick.cli').send({ msg = '{file}' }) end)
 vim.keymap.set('x', '<Leader>av', function() require('sidekick.cli').send({ msg = '{selection}' }) end)
 vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').send({ msg = '{this}' }) end)
@@ -283,38 +284,6 @@ vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').se
 --  skipped if "b:current_syntax" is set.
 -- [:help ftplugin-overrule] [:help mysyntaxfile-replace]
 -- [:help syntax-loading] [:help scriptnames]
---
--- [cols="~,~,~"]
--- |===
---
--- | C | before/syntax/c.lua
---
--- | Git | after/ftplugin/gitcommit.lua
--- | https://git-scm.com
---
--- | Go | after/ftplugin/go.lua
--- | https://go.dev
---
--- | Lua | after/ftplugin/lua.lua
--- | https://lua.org https://luarocks.org
---
--- | Markdown | after/ftplugin/markdown.lua
--- | https://commonmark.org
---
--- | MDX | after/ftplugin/mdx.lua
--- | https://mdxjs.com
---
--- | RSpec | after/syntax/rspec.vim
--- | https://rspec.info
---
--- | Ruby | before/syntax/ruby.lua
--- | https://ruby-lang.org
---
--- | Shell | before/syntax/sh.lua
---
--- | XML | before/syntax/xml.lua
---
--- |===
 
 vim.filetype.add({
 	extension = {
