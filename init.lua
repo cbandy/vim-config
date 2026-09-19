@@ -120,10 +120,10 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 			.. ':' .. vim.fs.joinpath(vim.env.HOME, '.local', 'luals', 'bin')
 end)
 
--- Explain Neovim workspace to LuaLS
+-- Explain Neovim workspace to Lua Language Server
 require('lazydev').setup({
 	debug = false,
-	integrations = { lspconfig = false }, -- not using nvim-lspconfig
+	integrations = { lspconfig = false }, -- not using `nvim-lspconfig`
 	library = { { path = '${3rd}/luv/library', words = { 'vim%.uv' } } },
 })
 
@@ -177,7 +177,7 @@ require('nvim-tree').setup({
 			git_placement = 'after',
 			glyphs = {
 				bookmark = '⭘',
-				folder = { arrow_closed = '⏵', arrow_open = '◼' },
+				folder = { arrow_closed = '⏵', arrow_open = '⏷' },
 				git = { deleted = '⊖ ', staged = (jit.os == 'OSX' and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
 			},
 		},
@@ -197,7 +197,7 @@ require('pomo').setup({
 
 require('sidekick').setup({
 	copilot = { status = { enabled = false } },
-	nes = { enabled = false },
+	nes = { enabled = false }, -- Next Edit Suggestions
 	cli = {
 		mux = { backend = 'tmux', create = 'split', enabled = true, split = { vertical = false, size = 0.2 } },
 		tools = {
@@ -214,6 +214,19 @@ require('sidekick').setup({
 				end,
 			},
 			claude = { url = 'https://code.claude.com/docs/en/cli-reference', cmd = { 'nice', 'claude' } },
+		},
+	},
+	ui = {
+		icons = {
+			nes               = '🗇 ',
+			attached          = '🗲+',
+			started           = '🗲-',
+			installed         = '⏻ ',
+			missing           = '🗙 ',
+			external_attached = ' ⇆ ',
+			external_started  = '   ',
+			terminal_attached = ' ⇆ ',
+			terminal_started  = '   ',
 		},
 	},
 })
@@ -273,8 +286,7 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 -- Other LSP functions are mapped to "gr*" too. [:help lsp-defaults]
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
 
-vim.keymap.set('n', '<Leader>aa', function() require('sidekick.cli').toggle({ name = 'antigravity' }) end)
-vim.keymap.set('n', '<Leader>ac', function() require('sidekick.cli').toggle({ name = 'claude' }) end)
+vim.keymap.set('n', '<Leader>ac', function() require('sidekick.cli').select({ filter = { installed = true } }) end)
 vim.keymap.set('n', '<Leader>af', function() require('sidekick.cli').send({ msg = '{file}' }) end)
 vim.keymap.set('x', '<Leader>av', function() require('sidekick.cli').send({ msg = '{selection}' }) end)
 vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').send({ msg = '{this}' }) end)
