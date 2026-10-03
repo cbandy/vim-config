@@ -195,6 +195,16 @@ function M.lsp_notify_configuration(client, bufnr, settings)
 	end
 end
 
+---@param template string
+function M.sidekick_send(template)
+	local _, text = require('sidekick.cli').render(template)
+	if not text then return end
+
+	require('sidekick.cli.state').with(function(state)
+		state.session:send(state.tool:format(text))
+	end, { attach = true, show = true, focus = true })
+end
+
 ---@return Iter # all the lines in the files of &spellfile
 function M.spellfile_lines(lang2)
 	return vim.iter(vim.split(vim.o.spellfile, ',', {

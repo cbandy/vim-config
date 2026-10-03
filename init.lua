@@ -200,6 +200,7 @@ require('sidekick').setup({
 	nes = { enabled = false }, -- Next Edit Suggestions
 	cli = {
 		mux = { backend = 'tmux', create = 'split', enabled = true, split = { vertical = false, size = 0.2 } },
+		---@type table<string, sidekick.cli.Config>
 		tools = {
 			antigravity = {
 				url = 'https://antigravity.google/docs/cli/overview',
@@ -208,9 +209,15 @@ require('sidekick').setup({
 				resume = { '--continue' },
 				continue = { '--continue' },
 				format = function(text)
-					require('sidekick.text').transform(text, function(str)
-						return str:find('[^%w/_%.%-]') and ('"' .. str .. '"') or str
-					end, 'SidekickLocFile')
+					local Text = require('sidekick.text')
+					Text.transform(text, function(s) return '[' .. s .. ']' end, 'SidekickLocFile') -- Wrap filepaths in brackets; `@[filename]`
+					local result = Text.to_string(text)
+					result = result:gsub('(@%b[]) (:L[%d:CL%-]+)', function(f, r)
+						local b = r:match('^:L(%d+):C%d+') or r:match('^:L(%d+)')
+						local e = r:match('-L(%d+):C%d+$') or r:match('-L(%d+)$')
+						return f .. ':' .. (e and (b .. '-' .. e) or b)
+					end)
+					return result
 				end,
 			},
 			claude = { url = 'https://code.claude.com/docs/en/cli-reference', cmd = { 'nice', 'claude' } },
@@ -287,9 +294,9 @@ vim.keymap.set('n', '<Leader>R', ':TestNearest<CR>', { silent = true })
 vim.keymap.set('n', 'grq', vim.diagnostic.setqflist, { desc = 'vim.diagnostic.setqflist()' })
 
 vim.keymap.set('n', '<Leader>ac', function() require('sidekick.cli').select({ filter = { installed = true } }) end)
-vim.keymap.set('n', '<Leader>af', function() require('sidekick.cli').send({ msg = '{file}' }) end)
-vim.keymap.set('x', '<Leader>av', function() require('sidekick.cli').send({ msg = '{selection}' }) end)
-vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('sidekick.cli').send({ msg = '{this}' }) end)
+vim.keymap.set('n', '<Leader>af', function() require('local').sidekick_send('{file} ') end)
+vim.keymap.set('x', '<Leader>av', function() require('local').sidekick_send('{selection} ') end)
+vim.keymap.set({ 'n', 'x' }, '<Leader>at', function() require('local').sidekick_send('{this} ') end)
 
 -- "after/ftplugin" files are loaded after any builtin ones.
 -- "before/syntax" files are loaded before builtin ones; the builtin will be
