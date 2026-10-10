@@ -54,6 +54,7 @@ return {
 
 	settings = {
 		['rust-analyzer'] = {
+			assist = { preferSelf = true },
 			numThreads = threads,
 			cachePriming = { enable = false },
 			lru = { capacity = 64 },

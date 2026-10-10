@@ -17,6 +17,8 @@ LTeX+/=
 Metabase/=
 namespace
 namespaces
+OAuth/=
+OIDC/=
 OpenAPI/=
 OpenShift/=
 OpenTelemetry/=

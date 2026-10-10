@@ -113,7 +113,7 @@ return {
 	settings = {
 		gopls = {
 			-- https://github.com/golang/tools/blob/-/gopls/doc/analyzers.md
-			analyses = { shadow = true },
+			analyses = { appendclipped = true, slicesdelete = true },
 			-- https://github.com/golang/tools/blob/-/gopls/doc/codelenses.md
 			codelenses = { vulncheck = true },
 			-- https://github.com/golang/tools/blob/-/gopls/doc/inlayHints.md

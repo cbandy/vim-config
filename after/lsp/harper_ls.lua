@@ -4,7 +4,7 @@
 ---@type vim.lsp.Config
 return {
 	cmd = { 'nice', 'harper-ls', '--stdio' },
-	filetypes = { 'asciidoc', 'gitcommit', 'go', 'html', 'lua', 'markdown', 'python', 'ruby', 'rust', 'text', 'toml' },
+	filetypes = { 'asciidoc', 'cucumber', 'gitcommit', 'go', 'html', 'lua', 'markdown', 'python', 'ruby', 'rust', 'text', 'toml' },
 	root_markers = { '.git', '.harper-dictionary.txt' },
 
 	-- https://writewithharper.com/docs/integrations/language-server#Configuration
@@ -14,7 +14,7 @@ return {
 			dialect = 'American',
 
 			-- https://writewithharper.com/docs/rules
-			linters = {},
+			linters = { SpellCheck = false, SplitWords = false, ToDoHyphen = false },
 		},
 	},
 }
