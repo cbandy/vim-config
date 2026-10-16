@@ -98,7 +98,7 @@ apply(vim.lsp.config, function(vim_lsp_extend)
 		-- https://pkg.go.dev/github.com/wader/jq-lsp
 		jqls = { filetypes = { 'jq' }, cmd = { 'nice', 'go', 'run', 'github.com/wader/jq-lsp@latest' } },
 		-- https://pkg.go.dev/github.com/grafana/jsonnet-language-server/pkg/server#Configuration
-		jsonnet = { filetypes = { 'jsonnet', 'libsonnet' }, cmd = { 'nice', 'go', 'run', 'github.com/grafana/jsonnet-language-server@latest' } },
+		jsonnet = { filetypes = { 'jsonnet' }, cmd = { 'nice', 'go', 'run', 'github.com/grafana/jsonnet-language-server@latest' } },
 		-- https://sorbet.org
 		ruby_sorbet = { filetypes = { 'ruby' }, root_markers = { 'Gemfile' }, cmd = { 'nice', 'bundle', 'exec', 'srb', 'tc', '--disable-watchman', '--lsp' } },
 		-- https://github.com/standardrb/standard
@@ -243,15 +243,14 @@ require('local').treesitter_setup({
 		-- configuration and data
 		'csv', 'json', 'nix', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
 		-- editing
-		'diff', 'editorconfig', 'vim', 'vimdoc',
+		'diff', 'editorconfig',
 		-- interpreted
-		'bash', 'dockerfile', 'helm', 'javascript', 'lua', 'luap', 'perl',
+		'bash', 'dockerfile', 'helm', 'javascript', 'luap', 'perl',
 		'php_only', 'python', 'ruby', 'sql', 'vhs',
 		-- compiled
-		'c', 'cpp', 'go', 'gomod', 'gowork', 'rust', 'typescript',
+		'cpp', 'go', 'gomod', 'gowork', 'rust', 'typescript',
 		-- presentation
-		'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html',
-		'markdown', 'markdown_inline', 'rst', 'tsx',
+		'asciidoc', 'asciidoc_inline', 'css', 'gotmpl', 'html', 'rst', 'tsx',
 	},
 	['nvim-treesitter'] = {},
 	['nvim-treesitter-context'] = { mode = 'topline', multiline_threshold = 4 },
