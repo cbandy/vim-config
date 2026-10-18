@@ -162,34 +162,43 @@ require('mini.test').setup({
 	},
 })
 
-require('nvim-tree').setup({
-	diagnostics = { enable = true, icons = { hint = '!', info = 'ℹ', warning = '⚠', error = '🔥' } },
-	hijack_netrw = false,
-	renderer = {
-		add_trailing = true,
-		full_name = true,
-		group_empty = true,
-		highlight_git = 'icon',
-		indent_markers = { enable = true },
-		icons = {
-			show = { file = false, folder = false, modified = false },
-			symlink_arrow = (jit.os == 'OSX' and ' ➜ ' or ' ➔  '),
-			git_placement = 'after',
-			glyphs = {
-				bookmark = '⭘',
-				folder = { arrow_closed = '⏵', arrow_open = '⏷' },
-				git = { deleted = '⊖ ', staged = (jit.os == 'OSX' and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
+require('nvim-tree').setup(vim.tbl_deep_extend('force',
+	{
+		diagnostics = { enable = true },
+		hijack_netrw = false,
+		renderer = {
+			add_trailing = true,
+			full_name = true,
+			group_empty = true,
+			highlight_git = 'icon',
+			indent_markers = { enable = true },
+			icons = { show = { file = false, folder = false, modified = false }, git_placement = 'after' },
+		},
+	} --[[@as nvim_tree.config]],
+
+	{ renderer = { icons = { glyphs = { git = { unstaged = '⍻' } } } } },
+
+	vim.env.NERD_FONT == '1' and {} or {
+		diagnostics = { icons = { hint = '!', info = 'ℹ', warning = '⚠', error = '🔥' } },
+		renderer = {
+			icons = {
+				symlink_arrow = (jit.os == 'OSX' and ' ➜ ' or ' ➔  '),
+				glyphs = {
+					bookmark = '⭘',
+					folder = { arrow_closed = '⏵', arrow_open = '⏷' },
+					git = { deleted = '⊖ ', staged = (jit.os == 'OSX' and '\u{2611}' or '🗹'), unmerged = '⦹', unstaged = '⍻', untracked = '✷' },
+				},
 			},
 		},
-	},
-})
+	} --[[@as nvim_tree.config]]
+))
 
 require('pomo').setup({
 	-- use these when not specified
 	notifiers = vim.iter({
-		{ { name = 'Default', opts = { text_icon = '⏱️', title_icon = '⏳' } } },
+		{ { name = 'Default', opts = (vim.env.NERD_FONT == '1' and {} or { text_icon = '⏱️', title_icon = '⏳' }) } },
 		jit.os == 'OSX' and { { name = 'System' } } or {},
-	}):flatten():totable(),
+	} --[[@as pomo.NotifierConfig[][] ]]):flatten():totable(),
 	timers = {},          -- override notifier by timer name
 	sessions = {},        -- define sequences of timers
 	update_interval = 1e3, -- one second
@@ -224,7 +233,7 @@ require('sidekick').setup({
 		},
 	},
 	ui = {
-		icons = {
+		icons = (vim.env.NERD_FONT == '1' and {} or {
 			nes               = '🗇 ',
 			attached          = '🗲+',
 			started           = '🗲-',
@@ -234,7 +243,7 @@ require('sidekick').setup({
 			external_started  = '   ',
 			terminal_attached = ' ⇆ ',
 			terminal_started  = '   ',
-		},
+		}),
 	},
 })
 
