@@ -2,9 +2,9 @@
 local math, vim = math, vim
 
 -- rust-analyzer looks at CPU cores for its default thread count.
--- That doesn't consider any differences between them (P, E, etc.), so allocate only ¼ of those instead.
+-- That doesn't consider any differences between them (P, E, etc.), so allocate only ½ of those instead.
 local threads = tonumber(vim.env.OMP_NUM_THREADS) or vim.uv.available_parallelism()
-if threads > 4 then threads = math.floor(threads / 4) end
+if threads > 2 then threads = math.floor(threads / 2) end
 
 ---@type vim.lsp.Config
 return {
