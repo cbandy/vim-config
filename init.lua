@@ -250,7 +250,7 @@ require('sidekick').setup({
 require('local').treesitter_setup({
 	languages = {
 		-- configuration and data
-		'csv', 'json', 'nix', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
+		'csv', 'json', 'jsonnet', 'nix', 'pem', 'properties', 'psv', 'starlark', 'toml', 'tsv', 'xml', 'yaml',
 		-- editing
 		'diff', 'editorconfig',
 		-- interpreted
